@@ -25,11 +25,11 @@ public class ArcadeApp extends Application {
      * @return the mouse event handler
      */
     private EventHandler<? super MouseEvent> createMouseHandler() {
-	return event -> {
-	    System.out.println(event);
-	    r.setX(rng.nextDouble() * (640 - r.getWidth()));
-	    r.setY(rng.nextDouble() * (480 - r.getHeight()));
-	};
+        return event -> {
+            System.out.println(event);
+            r.setX(rng.nextDouble() * (640 - r.getWidth()));
+            r.setY(rng.nextDouble() * (480 - r.getHeight()));
+        };
     } // createMouseHandler
 
     /**
@@ -39,12 +39,12 @@ public class ArcadeApp extends Application {
      * @return the key event handler
      */
     private EventHandler<? super KeyEvent> createKeyHandler() {
-	return event -> {
-	    System.out.println(event);
-	    if (event.getCode() == KeyCode.LEFT)  r.setX(r.getX() - 10.0);
-	    if (event.getCode() == KeyCode.RIGHT) r.setX(r.getX() + 10.0);
-	    // TODO bounds checking
-	};
+        return event -> {
+            System.out.println(event);
+            if (event.getCode() == KeyCode.LEFT)  r.setX(r.getX() - 10.0);
+            if (event.getCode() == KeyCode.RIGHT) r.setX(r.getX() + 10.0);
+            // TODO bounds checking
+        };
     } // createKeyHandler
 
     /** {@inheritdoc} */
