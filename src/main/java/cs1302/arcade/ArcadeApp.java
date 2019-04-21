@@ -42,32 +42,38 @@ public class ArcadeApp extends Application {
 
     /**
      * Returns the {@code Scene} that displays the game selection view.
-     *
-     * @return a scene displaying the game selection view
      */
-    private Scene buildSelectGameScene() {
-        // Components
-        Image imageTetris = new Image(FILE LOCATION, 100, 100, 1, 1); // TODO
-        Image image2048 = new Image(FILE LOCATION, 100, 100, 1, 1); // TODO
+    private void buildSelectGameScene() {
+        // Image views
+        Image imageTetris = new Image(FILE LOCATION, 100, 100, true, true); // TODO
+        Image image2048 = new Image(FILE LOCATION, 100, 100, true, true); // TODO
+        ImageView imageViewTetris = new ImageView(imageTetris);
+        ImageView imageView2048 = new ImageView(image2048);
+        // Buttons
         Button buttonTetris = new Button(imageTetris);
         Button button2048 = new Button(image2048);
+        buttonTetris.setGraphic(imageViewTetris);
+        button2048.setGraphic(imageView2048);
         startTetrisEvent(buttonTetris);
         start2048Event(button2048);
+        // Labels
         Label labelTetris = new Label("Tetris");
         Label label2048 = new Label("2048");
+
         // GridPane children and configuration
         GridPane gridPane = new GridPane();
         gridPane.add(buttonTetris, 0, 0, 1, 1);
         gridPane.add(button2048, 1, 0, 1, 1);
         gridPane.add(labelTetris, 0, 1, 1, 1);
         gridPane.add(label2048, 1, 1, 1, 1);
+        gridPane.setHalignment(labelTetris, HPos.CENTER);
+        gridPane.setHalignment(label2048, HPos.CENTER);
+        // Center grid pane on the stage
+        gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        // StackPane centers gridpane to middle of scene
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(gridPane);
         // Set scene
-        gameSelectScene = new Scene(stackPane, 300, 200, Color.BLUE);
+        gameSelectScene = new Scene(gridPane, 300, 200, Color.BLUE);
     } // setSelectGameScene()
 
     /**
