@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
+import javafx.control.Label;
+import javafx.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
@@ -13,7 +16,7 @@ import javafx.event.ActionEvent;
 public class ArcadeApp extends Application {
 
     Stage stage;
-    Scene scene;
+    Scene gameSelectScene;
 
     /**
      * {@inheritdoc}
@@ -21,42 +24,50 @@ public class ArcadeApp extends Application {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-
-        setSelectGameScene();
-
+        buildSelectGameScene();
         // Configure stage
         stage.setTitle("cs1302-arcade!");
-        stage.setScene(scene);
+        stage.setScene(gameSelectScene);
         stage.setResizable(false);
-        stage.sizeToScene();
         stage.show();
     } // start
 
     /**
-     * Sets the {@code Scene} to the game selection view.
+     * Sets the stage to display the game selection scene.
      */
-    protected void setSelectGameScene() {
-        // Instantiate components
-        GridPane mainPane = new GridPane();
-        // 2048 Button & Label
-        Image image2048 = new Image("file:resources/2048Logo.png"
-                , 100, 100, true, true);
-        Button button2048 = new Button(image2048);
-        start2048Event(button2048);
-        Label label2048 = new Label("2048");
-        // Tetris Button & Label
-        Image imageTetris = new Image("file:resources/tetrisLogo.png"
-                , 100, 100, true, true);
+    public void setSelectGameScene() {
+        stage.setScene(gameSelectScene);
+        stage.sizeToScene();
+    } // setSelectGameScene()
+
+    /**
+     * Returns the {@code Scene} that displays the game selection view.
+     *
+     * @return a scene displaying the game selection view
+     */
+    private Scene buildSelectGameScene() {
+        // Components
+        Image imageTetris = new Image(FILE LOCATION, 100, 100, 1, 1); // TODO
+        Image image2048 = new Image(FILE LOCATION, 100, 100, 1, 1); // TODO
         Button buttonTetris = new Button(imageTetris);
+        Button button2048 = new Button(image2048);
         startTetrisEvent(buttonTetris);
+        start2048Event(button2048);
         Label labelTetris = new Label("Tetris");
-        // Configure main pane components
-        mainPane.add(button2048, 0, 0);
-        mainPane.add(buttonTetris, 1, 0);
-        mainPane.add(label2048, 1, 0);
-        mainPane.add(labelTetris, 1, 1);
+        Label label2048 = new Label("2048");
+        // GridPane children and configuration
+        GridPane gridPane = new GridPane();
+        gridPane.add(buttonTetris, 0, 0, 1, 1);
+        gridPane.add(button2048, 1, 0, 1, 1);
+        gridPane.add(labelTetris, 0, 1, 1, 1);
+        gridPane.add(label2048, 1, 1, 1, 1);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        // StackPane centers gridpane to middle of scene
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(gridPane);
         // Set scene
-        scene = new Scene(mainPane, 400, 200, Color.BLUE);
+        gameSelectScene = new Scene(stackPane, 300, 200, Color.BLUE);
     } // setSelectGameScene()
 
     /**
@@ -67,7 +78,7 @@ public class ArcadeApp extends Application {
     private void start2048Event(Button button) {
         EventHandler<ActionEvent> handler = event -> {
             Arcade2048View view = new Arcade2048View(this);
-            scene = new Scene(view);
+            stage.setScene(new Scene(view.asParent()));
             stage.sizeToScene();
         };
         button.setOnAction(handler);
@@ -81,7 +92,7 @@ public class ArcadeApp extends Application {
     private void startTetrisEvent(Button button) {
         EventHandler<ActionEvent> handler = event -> {
             ArcadeTetrisView view = new ArcadeTetrisView(this);
-            scene = new Scene(view);
+            stage.setScene(new Scene(view.asParent()));
             stage.sizeToScene();
         };
         button.setOnAction(handler);
