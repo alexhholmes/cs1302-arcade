@@ -66,8 +66,8 @@ public class ArcadeApp extends Application {
         gridPane.add(button2048, 1, 0, 1, 1);
         gridPane.add(labelTetris, 0, 1, 1, 1);
         gridPane.add(label2048, 1, 1, 1, 1);
-        gridPane.setHalignment(labelTetris, HPos.CENTER);
-        gridPane.setHalignment(label2048, HPos.CENTER);
+        GridPane.setHalignment(labelTetris, HPos.CENTER);
+        GridPane.setHalignment(label2048, HPos.CENTER);
         // Center grid pane on the stage
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
