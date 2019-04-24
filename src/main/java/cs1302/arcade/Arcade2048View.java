@@ -7,7 +7,11 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
+import javafx.scene.shape.Rectangle;
 
+/**
+ * The UI elements of a 2048 game.
+ */
 public class Arcade2048View {
     
     private ArcadeApp app;
@@ -17,6 +21,9 @@ public class Arcade2048View {
     private Model2048 model;
     private Controller2048 controller;
     
+    /**
+     * Starts a new game of 2048.
+     */
     public Arcade2048View(ArcadeApp app) {
         // Instance variables
         this.app = app;
@@ -30,13 +37,15 @@ public class Arcade2048View {
         controller.startGame();
     } // Arcade2048View(ArcadeApp)
 
+    /**
+     * Builds the game view.
+     */
     public void buildView() {
         // MenuBar
         MenuBar menuBar = new MenuBar();
         Menu gameMenu = new Menu("Game");
         Menu helpMenu = new Menu("Help");
         MenuItem resetItem = new MenuItem("Reset Game");
-        MenuItem highScoresItem = new MenuItem("High Scores");
         MenuItem exitItem = new MenuItem("Exit Game");
         MenuItem helpItem = new MenuItem("How to Play");
         gameMenu.getItems()
@@ -45,13 +54,11 @@ public class Arcade2048View {
             .addAll(helpItem);
         menuBar.getChildren()
             .addAll(gameMenu, helpMenu);
+        // MenuItem event handlers
         EventHandler<ActionEvent> resetHandler = event -> {
             controller.reset();
         };
         resetItem.setOnAction(resetHandler);
-        EventHandler<ActionEvent> highScoreHandler = event -> {
-            openHighScoresWindow(); // TODO
-        };
         EventHandler<ActionEvent> exitHandler = event -> {
             app.setSelectGameScene();
         };
@@ -59,6 +66,7 @@ public class Arcade2048View {
         EventHandler<ActionEvent> helpHandler = event -> {
             openHelpWindow();
         };
+        helpItem.setOnAction(helpHandler);
         // Game label
         Label gameLabel = new Label("2048");
         // Score
@@ -90,6 +98,58 @@ public class Arcade2048View {
             .addAll(menuBar, gridPane);
     } // buildView()
 
+    /**
+     * Binds the board UI tiles to the board model tiles.
+     */
+    private void bindBoard() {
+        Tile[][] board = model.getBoard();
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                Tile tile = board[row][col];
+                IntegerProperty value = tile.valueProperty();
+                Color color = tile.getColor();
+                bindTile(row, col, value, color);
+            } // for
+        } // for
+    } // bindBoard()
+
+    /**
+     * Binds a tile to its corresponding board data model value and sets its
+     * color.
+     *
+     * @param row the row of the tile
+     * @param col the column of the tile
+     * @param value the value of the tile piece
+     * @param color the color of the tile piece
+     */
+    private void bindTile(int row, int col, IntegerProperty value, Color color) {
+        StackPane tile = board.getTile(row, col);
+        // Bind UI tile text to display the tile integer value
+        tile.get(1).textProperty().bind(value);
+        setTileColor(tile.getChildren(0), color);
+    } // bindTile(int, int, IntegerProperty, Color)
+
+    /**
+     * Sets the CSS for the tile to the specified color. A color of black indicates
+     * that the board space is empty.
+     *
+     * @param tile a rectangle representing a game tile
+     * @param color the color of the tile piece
+     */
+    private void setTileColor(Rectangle tile, Color color) {
+        // TODO
+        switch (color) {
+            case BLACK:
+                tile.applyCSS(); // TODO
+                break;
+        }
+    } // setTileColor(Rectangle, Color)
+
+    /**
+     * Returns the root node of this game as a {@code Parent}.
+     *
+     * @return the root node of this game
+     */
     public Parent asParent() {
         return root;
     } // asParent()
