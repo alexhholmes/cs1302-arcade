@@ -125,7 +125,7 @@ public class Arcade2048View {
     private void bindTile(int row, int col, IntegerProperty value, Color color) {
         StackPane tile = board.getTile(row, col);
         // Bind UI tile text to display the tile integer value
-        tile.get(1).textProperty().bind(value);
+        tile.get(1).textProperty().bind(value.asString());
         setTileColor(tile.getChildren(0), color);
     } // bindTile(int, int, IntegerProperty, Color)
 
