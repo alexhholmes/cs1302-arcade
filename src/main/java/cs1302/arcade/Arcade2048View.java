@@ -145,6 +145,10 @@ public class Arcade2048View {
         }
     } // setTileColor(Rectangle, Color)
 
+    private void tileColorListener() {
+        
+    } // tileColorListener
+
     /**
      * Returns the root node of this game as a {@code Parent}.
      *

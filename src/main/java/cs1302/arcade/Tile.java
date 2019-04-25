@@ -1,5 +1,6 @@
 package cs1302.arcade;
 
+import javafx.scene.paint.Color;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
