@@ -40,9 +40,11 @@ public class Tile {
      * Sums the value of this tile with a tile that it is merging with.
      *
      * @param tile the tile that this tile is merging with
+     * @return the new value of this tile
      */
-    public void mergeTile(Tile tile) {
+    public int mergeTile(Tile tile) {
         value.setValue(getValue() + tile.getValue());
+        return getValue();
     } // mergeTile(Tile)
 
     /**
