@@ -3,7 +3,7 @@ package cs1302.arcade;
 /**
  * A model for a 2048 game board.
  */
-public class Board2048 {
+public class Model2048 {
     
     private static final int ROWS = 4;
     private static final int COLS = 4;
@@ -54,5 +54,21 @@ public class Board2048 {
     public void resetBoard() {
         board = new Tile[ROWS][COLS];
     } // resetBoard()
+
+    /**
+     * Returns true if all Tiles on the board are not empty.
+     *
+     * @return true if all Tiles on the board are not empty.
+     */
+    public boolean isFull() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (getTile(row, col).isEmpty()) {
+                    return false;
+                } // if
+            } // for
+        } // for
+        return true;
+    } // isFull()
 
 } // Model2048
