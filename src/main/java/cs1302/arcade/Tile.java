@@ -41,7 +41,7 @@ public class Tile {
      *
      * @param tile the tile that this tile is merging with
      */
-    public mergeTile(Tile tile) {
+    public void mergeTile(Tile tile) {
         value.setValue(getValue() + tile.getValue());
     } // mergeTile(Tile)
 
@@ -51,5 +51,14 @@ public class Tile {
     public void resetTile() {
         score.setValue(0);
     } // resetTile()
+
+    /**
+     * Return true if this tile's value is zero.
+     *
+     * @return true of this tile's value is zero.
+     */
+    public boolean isEmpty() {
+        return getValue() == 0 ? true : false;
+    } // isEmpty()
 
 } // Tile
