@@ -2,33 +2,34 @@ package cs1302.arcade;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
 
 /**
- * A model for the Tetris game score.
+ * A model for a game's score.
  */
-public class TetrisScore {
+public class Score {
 
     /** Score Property */
-    private IntegerProperty score;
+    private IntegerProperty score = new SimpleIntegerProperty();
 
     /**
      * Initializes score property.
      */
-    public TetrisScore() {
-        score = new SimpleIntegerProperty();
-    } // TetrisScore()
+    public Score() {
+        resetScore();
+    } // Score
 
     /**
      * Returns this model's score property.
      *
      * @return this model's score property.
      */
-    public IntegerProperty scoreProperty() {
+    public ReadOnlyIntegerProperty scoreProperty() {
         return this.score;
     } // scoreProperty()
 
     /**
-     * Adds the specified parameter to the current score.
+     * Adds the given value to the current score.
      *
      * @param num the amount added to the score
      */
@@ -37,10 +38,10 @@ public class TetrisScore {
     } // addScore(int)
 
     /**
-     * Sets the score to zero.
+     * Resets the score value to zero.
      */
     public void resetScore() {
         this.score.setValue(0);
     } // resetScore()
 
-} // TetrisScore
+} // Score

@@ -1,21 +1,19 @@
 package cs1302.arcade;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-
-public class Model2048 {
+/**
+ * A model for a 2048 game board.
+ */
+public class Board2048 {
     
     private static final int ROWS = 4;
     private static final int COLS = 4;
 
-    private IntegerProperty score = new SimpleIntegerProperty();
     private Tile[][] board = new Tile[ROWS][COLS];
     
     /**
      * Sets the initial model for the 2048 game.
      */
-    public Model2048() {
+    public Board2048() {
         resetScore();
     } // Model2048()
 
@@ -56,30 +54,5 @@ public class Model2048 {
     public void resetBoard() {
         board = new Tile[ROWS][COLS];
     } // resetBoard()
-
-    /**
-     * Returns the 2048 score property.
-     *
-     * @return the score property
-     */
-    public ReadOnlyIntegerProperty scoreProperty() {
-        return score;
-    } // scoreProperty()
-
-    /**
-     * Adds the given value to the current score.
-     *
-     * @param num the value to add to the current score
-     */
-    public addScore(int num) {
-        score.setValue(score.getValue() + num);
-    } // addScore(int)
-
-    /**
-     * Resets the score value to zero.
-     */
-    public void resetScore() {
-        score.setValue(0);
-    } // resetScore()
 
 } // Model2048
