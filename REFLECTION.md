@@ -32,3 +32,15 @@ that the Markdown is transformed into nice looking HTML.
    there are a plethora of ways to go about it. Implementing mechanics such as how
    to get the tetris blocks to rotate and make the blocks fall smoothly has been no
    easy task
+
+## TUE 2019-04-30 @ 11:55 PM EST
+
+1. **DONE:** Fixed a tile on 2048 as well as merged the score class to function
+   with both games . Began implementation of the TetrisBlock and TetrisPiece
+   classes. Added additional functionality to TetrisBoard class. 
+
+2. **TODO:** Finish implementing both tetris and 2048 as welll as debug both
+   of them.
+
+3. **PROB:** Getting the tetris pieces to properly rotate is still very challenging for us.
+   The animation on 2048 has been difficult to figure out. 
