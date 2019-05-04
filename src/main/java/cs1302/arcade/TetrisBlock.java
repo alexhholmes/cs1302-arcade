@@ -1,18 +1,20 @@
 package cs1302.arcade;
 
+import javafx.scene.paint.Color;
+
 /** class for the individual tetris blocks
 */
 public class TetrisBlock {
 
     public int xValue;
     public int yValue;
-    public BLOCKCOLOR color;
+    public Color color;
     
     /**creates a tetris block
     * @param x column the block is in
     * @param y row the block is in
     */
-    public TetrisBlock(int x, int y, BLOCKCOLOR c){
+    public TetrisBlock(int x, int y, Color c){
         xValue = x;
         yValue = y;
         color = c;

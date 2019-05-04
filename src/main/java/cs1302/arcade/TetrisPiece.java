@@ -1,8 +1,10 @@
 package cs1302.arcade;
 
+import javafx.scene.paint.Color;
+
 /** class for the tetris pieces
 */
-public class TetrisPiece {
+public class TetrisPiece extends TetrisBlock{
     public TetrisBlock block1, block2, block3, block4;
 
     /** creates a tetris piece 
@@ -10,60 +12,32 @@ public class TetrisPiece {
     */
     public TetrisPiece(int num){
         switch(num){
-            // creates long piece
             case 1: {
-                block1 = new TetrisBlock(6, 0, BLOCKCOLOR.LIGHT_BLUE);
-                block2 = new TetrisBlock(6, 1, BLOCKCOLOR.LIGHT_BLUE);
-                block3 = new TetrisBlock(6, 2, BLOCKCOLOR.LIGHT_BLUE);
-                block4 = new TetrisBlock(6, 3, BLOCKCOLOR.LIGHT_BLUE);
+                this.makeLong();
                 break;
             }// case 1
-            // creates square piece
             case 2: {
-                block1 = new TetrisBlock(5, 0, BLOCKCOLOR.YELLOW);
-                block2 = new TetrisBlock(6, 0, BLOCKCOLOR.YELLOW);
-                block3 = new TetrisBlock(5, 1, BLOCKCOLOR.YELLOW);
-                block4 = new TetrisBlock(6, 1, BLOCKCOLOR.YELLOW);
+                this.makeSquare();
                 break;
             }// case 2
-            // creates Right L piece
             case 3: {
-                block1 = new TetrisBlock(5, 0, BLOCKCOLOR.ORANGE);
-                block2 = new TetrisBlock(5, 1, BLOCKCOLOR.ORANGE);
-                block3 = new TetrisBlock(5, 2, BLOCKCOLOR.ORANGE);
-                block4 = new TetrisBlock(6, 2, BLOCKCOLOR.ORANGE);
+                this.makeRightL();
                 break;
             }// case 3
-            // creates Left L piece
             case 4: {
-                block1 = new TetrisBlock(6, 0, BLOCKCOLOR.DARK_BLUE);
-                block2 = new TetrisBlock(6, 1, BLOCKCOLOR.DARK_BLUE);
-                block3 = new TetrisBlock(6, 2, BLOCKCOLOR.DARK_BLUE);
-                block4 = new TetrisBlock(5, 2, BLOCKCOLOR.DARK_BLUE);
+                this.makeLeftL();
                 break;
             }// case 4
-            // creates right Z piece
             case 5: {
-                block1 = new TetrisBlock(7, 0, BLOCKCOLOR.GREEN);
-                block2 = new TetrisBlock(6, 0, BLOCKCOLOR.GREEN);
-                block3 = new TetrisBlock(6, 1, BLOCKCOLOR.GREEN);
-                block4 = new TetrisBlock(5, 1, BLOCKCOLOR.GREEN);
+                this.makeRightZ();
                 break;
             }// case 5
-            // creates left Z piece
             case 6: {
-                block1 = new TetrisBlock(5, 0, BLOCKCOLOR.RED);
-                block2 = new TetrisBlock(6, 0, BLOCKCOLOR.RED);
-                block3 = new TetrisBlock(6, 1, BLOCKCOLOR.RED);
-                block4 = new TetrisBlock(7, 1, BLOCKCOLOR.RED);
+                this.makeLeftZ();
                 break;
             }// case 6
-            // creates T piece
             case 7: {
-                block1 = new TetrisBlock(6, 0, BLOCKCOLOR.PURPLE);
-                block2 = new TetrisBlock(5, 1, BLOCKCOLOR.PURPLE);
-                block3 = new TetrisBlock(6, 1, BLOCKCOLOR.PURPLE);
-                block4 = new TetrisBlock(7, 1, BLOCKCOLOR.PURPLE);
+                this.makeTPiece();
                 break;
             }// case 7
             default: {
@@ -71,6 +45,69 @@ public class TetrisPiece {
             }// default 
         }// switch
     }// TetrisPiece
+    
+    /** creates the long piece
+    */
+    public void makeLong(){
+        block1 = new TetrisBlock(6, 0, Color.LIGHTSKYBLUE);
+        block2 = new TetrisBlock(6, 1, Color.LIGHTSKYBLUE);
+        block3 = new TetrisBlock(6, 2, Color.LIGHTSKYBLUE);
+        block4 = new TetrisBlock(6, 3, Color.LIGHTSKYBLUE);
+    }// makeLong
+    
+    /** creates the square piece
+    */
+    public void makeSquare(){
+        block1 = new TetrisBlock(5, 0, Color.YELLOW);
+        block2 = new TetrisBlock(6, 0, Color.YELLOW);
+        block3 = new TetrisBlock(5, 1, Color.YELLOW);
+        block4 = new TetrisBlock(6, 1, Color.YELLOW);
+    }// makeSquare
+    
+    /** creates the right L piece
+    */
+    public void makeRightL(){
+        block1 = new TetrisBlock(5, 0, Color.ORANGE);
+        block2 = new TetrisBlock(5, 1, Color.ORANGE);
+        block3 = new TetrisBlock(5, 2, Color.ORANGE);
+        block4 = new TetrisBlock(6, 2, Color.ORANGE);
+    }// makeRightL
+    
+    /** creates the left L piece
+    */
+    public void makeLeftL(){
+        block1 = new TetrisBlock(6, 0, Color.DARKBLUE);
+        block2 = new TetrisBlock(6, 1, Color.DARKBLUE);
+        block3 = new TetrisBlock(6, 2, Color.DARKBLUE);
+        block4 = new TetrisBlock(5, 2, Color.DARKBLUE);
+    }// makeLeftL
+    
+    /** creates the right Z piece
+    */
+    public void makeRightZ(){
+        block1 = new TetrisBlock(7, 0, Color.GREEN);
+        block2 = new TetrisBlock(6, 0, Color.GREEN);
+        block3 = new TetrisBlock(6, 1, Color.GREEN);
+        block4 = new TetrisBlock(5, 1, Color.GREEN);
+    }// makeRightZ
+    
+    /** creates the left Z piece
+    */
+    public void makeLeftZ(){
+        block1 = new TetrisBlock(5, 0, Color.RED);
+        block2 = new TetrisBlock(6, 0, Color.RED);
+        block3 = new TetrisBlock(6, 1, Color.RED);
+        block4 = new TetrisBlock(7, 1, Color.RED);
+    }// makeLeftZ
+    
+    /** creates the T piece
+    */
+    public void makeT(){
+        block1 = new TetrisBlock(6, 0, Color.PURPLE);
+        block2 = new TetrisBlock(5, 1, Color.PURPLE);
+        block3 = new TetrisBlock(6, 1, Color.PURPLE);
+        block4 = new TetrisBlock(7, 1, Color.PURPLE);
+    }// makeTPiece
     
     /** returns a desired block
     * @param the number of the desired block
@@ -120,4 +157,19 @@ public class TetrisPiece {
             }// if
         }// for
     }// shiftLeft
+    
+    /** rotates a given piece
+    */
+    public void rotate(){
+        TetrisBlock pivot = this.getBlock(3);
+        for(int i = 1; i <= 4; i++){
+            if(i!=3){
+                TetrisBlock tempB = this.getBlock(i);
+                int newX = tempB.getColumn() - pivot.getColumn();
+                int newY = tempB.getRow()- pivot.getRow();
+                this.getBlock(i).setColumn((0*newX) + (-1*newY) + pivot.getColumn());
+                this.getBlock(i).setRow((1*newX) + (0*newY) + pivot.getRow());
+            }// if
+        }// for
+    }// rotate
 }// class
