@@ -5,16 +5,19 @@ package cs1302.arcade;
  */
 public class Model2048 {
     
+    /** Number of board rows */
     private static final int ROWS = 4;
+    /** Number of board columns */
     private static final int COLS = 4;
 
+    /** The game board */
     private Tile[][] board = new Tile[ROWS][COLS];
     
     /**
-     * Sets the initial model for the 2048 game.
+     * Sets the initial board model for the 2048 game.
      */
-    public Board2048() {
-        resetScore();
+    public Model2048() {
+        resetBoard();
     } // Model2048()
 
     /**
@@ -52,7 +55,11 @@ public class Model2048 {
      * Resets the board.
      */
     public void resetBoard() {
-        board = new Tile[ROWS][COLS];
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                board[row][col] = new Tile();
+            } // for
+        } // for
     } // resetBoard()
 
     /**
