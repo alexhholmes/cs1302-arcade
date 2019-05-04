@@ -12,6 +12,10 @@ public class Tile {
 
     /** Value of this tile */
     private IntegerProperty value = new SimpleIntegerProperty();
+    /** X Coordinate */
+    private DoubleProperty x = new SimpleDoubleProperty();
+    /** Y Coordinate */
+    private DoubleProperty y = new SimpleDoubleProperty();
     /** Color of this tile */
     private Color color;
 
@@ -56,6 +60,60 @@ public class Tile {
         value.setValue(value);
         setColor(value);
     } // setValue(int)
+
+    /**
+     * Returns the x property of this tile.
+     *
+     * @return the x property
+     */
+    public DoubleProperty xProperty() {
+        return x;
+    } // xProperty()
+
+    /**
+     * Returns the x value of this tile.
+     *
+     * @return the x value
+     */
+    public double getX() {
+        return x.getValue()
+    } // getX()
+
+    /**
+     * Sets the x to the specified value.
+     *
+     * @param x the x coordinate of this tile
+     */
+    public void setX(double x) {
+        this.x.setValue(x);
+    } // setX(double)
+
+    /**
+     * Returns the y property of this tile.
+     *
+     * @return the y property
+     */
+    public DoubleProperty yProperty() {
+        return y;
+    } // yProperty()
+
+    /**
+     * Returns the y value of this tile.
+     *
+     * @return the y value
+     */
+    public double getY() {
+        return x.getValue()
+    } // getY()
+
+    /**
+     * Sets the y to the specified value.
+     *
+     * @param y the y coordinate of this tile
+     */
+    public void setY(double y) {
+        this.y.setValue(y);
+    } // setY(double)
 
     /**
      * Sums the value of this tile with a tile that it is merging with.
