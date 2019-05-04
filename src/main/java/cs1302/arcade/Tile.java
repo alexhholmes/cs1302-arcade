@@ -3,6 +3,7 @@ package cs1302.arcade;
 import javafx.scene.paint.Color;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import java.util.Random;
 
 /**
  * A model representing a 2048 game tile.
@@ -48,6 +49,15 @@ public class Tile {
     } // getValue()
 
     /**
+     * Sets the value to the specified value and updates the color
+     * of this tile.
+     */
+    private void setValue(int value) {
+        value.setValue(value);
+        setColor(value);
+    } // setValue(int)
+
+    /**
      * Sums the value of this tile with a tile that it is merging with.
      *
      * @param tile the tile that this tile is merging with
@@ -57,6 +67,15 @@ public class Tile {
         value.setValue(getValue() + tile.getValue());
         return getValue();
     } // mergeTile(Tile)
+
+    /**
+     * Randomly sets this tile to either 2 or 4.
+     */
+    public void setRandomValue() {
+        Random random = new Random();
+        int num = (rand.nextInt(1) + 1) * 2;
+        setValue(num);
+    } // setRandomValue()
 
     /**
      * Returns the color of this tile.
@@ -71,9 +90,21 @@ public class Tile {
      * Resets the value of this tile to zero.
      */
     public void resetTile() {
-        score.setValue(0);
-        setColor(0);
+        setValue(0);
     } // resetTile()
+
+    /**
+     * Returns true if the value of this tile matches the given tile.
+     *
+     * @param tile the tile to check a match with
+     * @return true if this tile matches the given tile
+     */
+    public boolean matches(Tile tile) {
+        if (getValue() == tile.getValue) {
+            return true;
+        } // if
+        return false;
+    } // matches(Tile)
 
     /**
      * Return true if this tile's value is zero.
