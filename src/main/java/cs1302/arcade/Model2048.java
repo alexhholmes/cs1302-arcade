@@ -17,7 +17,11 @@ public class Model2048 {
      * Sets the initial board model for the 2048 game.
      */
     public Model2048() {
-        resetBoard();
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                board[row][col] = new Tile();
+            } // for
+        } // for
     } // Model2048()
 
     /**
@@ -41,15 +45,22 @@ public class Model2048 {
     } // getTile(int, int)
 
     /**
-     * Sets the tile at the specified position on the board.
-     * 
-     * @param tile the tile to put on the board
-     * @param row the row to put the tile in
-     * @param col the column to put the tile in
+     * Return the number of rows of this board.
+     *
+     * @return number of rows of this board.
      */
-    public void setTile(Tile tile, int row, int col) {
-        board[row][col] = tile;
-    } // setTile(Tile, int, int)
+    public int getRows() {
+        return ROWS;
+    } // getRows()
+
+    /**
+     * Return the number of columns of this board.
+     *
+     * @return number of columns of this board.
+     */
+    public int getCols() {
+        return COLS;
+    } // getCols()
 
     /**
      * Resets the board.
@@ -57,7 +68,7 @@ public class Model2048 {
     public void resetBoard() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                board[row][col] = new Tile();
+                board[row][col].resetTile();
             } // for
         } // for
     } // resetBoard()
