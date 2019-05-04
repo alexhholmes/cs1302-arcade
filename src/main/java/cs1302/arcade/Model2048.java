@@ -1,5 +1,7 @@
 package cs1302.arcade;
 
+import java.util.Random;
+
 /**
  * A model for a 2048 game board.
  */
@@ -88,5 +90,51 @@ public class Model2048 {
         } // for
         return true;
     } // isFull()
+
+    /**
+     * Returns true if the tile at the specified location has a value equal to
+     * all of its neighbors.
+     *
+     * @param row the row of the tile
+     * @param col the column of the tile
+     * @return true if the tile is equal to all its neighbors
+     */
+    public boolean checkNeighborsMatch(int row, int col) {
+        if (row - 1 >= 0) {
+            if (!getTile(row, col).matches(getTile(row - 1, col))) {
+                return false;
+            } // if
+        } // if
+        if (row + 1 < ROWS) {
+            if (!getTile(row, col).matches(getTile(row + 1, col))) {
+                return false;
+            } // if
+        } // if
+        if (col - 1 >= 0) {
+            if (!getTile(row, col).matches(getTile(row, col - 1))) {
+                return false;
+            } // if
+        } // if
+        if (col + 1 < COLS) {
+            if (!getTile(row, col).matches(getTile(row, col + 1))) {
+                return false;
+            } // if
+        } // if
+        return true;
+    } // checkNeighborsMatch(int, int)
+
+    /**
+     * Sets a random tile on the board to a new random value.
+     */
+    public void setRandomTile() {
+        while (true) {
+            Random random = new Random();
+            int randRow = random.nextInt(ROWS - 1);
+            int randCol = random.nextInt(COLS - 1);
+            if (!getTile(randRow, randCol).isEmpty()) {
+                getTile(randRow, randCol).setRandomValue();
+            } // if
+        } // while
+    } // setRandomTile
 
 } // Model2048
