@@ -9,11 +9,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
 
 public class ArcadeTetrisView {
     
     private ArcadeApp app;
-    private Label score;
+    private Label score, level;
     private HBox mainPane;
     private VBox gameSide, statSide;
     private GridPane gamePane, nextPane;
@@ -29,7 +30,7 @@ public class ArcadeTetrisView {
         this.app = app;
         mainPane = new HBox();
 
-        buildMainPane();
+        ControllerTetris 
     } // ArcadeTetrisView(ArcadeApp)
 
     /**
@@ -38,13 +39,14 @@ public class ArcadeTetrisView {
      */
     private void buildMainPane() {
         score = new Label("Score: 0");
+        level = new Label("Level: ");
         nextPane = new gridPane();
         gamePane = new gridPane();
         restart = new Button("Restart");
         quit = new Button("Quit");
         quitGame(quit);
         gameSide = new VBox(gamePane);
-        statSide = new VBox(score, nextPane, restart, quit);
+        statSide = new VBox(score, level, nextPane, restart, quit);
         
         mainPane.getChildren()
             .addAll(gameSide, statSide);
@@ -88,7 +90,8 @@ public class ArcadeTetrisView {
     
     private void resetGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
-            
+            ControllerTetris game = new ControllerTetris();
+            game.start(new ArcadeTetrisView());
         };
         button.setOnAction(handler);
     }// resetGame
@@ -116,6 +119,24 @@ public class ArcadeTetrisView {
                 });// runLater
         }// for
     }// buildNext
+    
+    /**
+    * updates the score display
+    * @param points the new score to display
+    */
+    public void updateScore(int points){
+        String scoreText = "Score: " + Integer.toString(points);
+        score.setText(scoreText);
+    }// updateScore
+    
+    /**
+    * updates the level display
+    * @param num the new level to display
+    */
+    public void updateLevel(int num){
+        String levelText = "Level: " + Integer.toString(num);
+        level.setText(levelText);
+    }// updateLevel
     
     /** helper method for build board that simply returns 
     * a given value to make java think the int is final
