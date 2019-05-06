@@ -10,16 +10,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 
+/** 
+* controls what the user sees while playing tetris
+*/
 public class ArcadeTetrisView {
     
     private ArcadeApp app;
-    private Label score, level;
+    private Label score, level, help;
     private HBox mainPane;
     private VBox gameSide, statSide;
     private GridPane gamePane, nextPane;
     private Button quit, restart; 
     private Alert warning = new Alert(AlertType.ERROR);
+    ControllerTetris game;
 
     /**
      * Constructs a new Tetris game.
@@ -28,9 +35,10 @@ public class ArcadeTetrisView {
      */
     public ArcadeTetrisView(ArcadeApp app) {
         this.app = app;
-        mainPane = new HBox();
-
-        ControllerTetris 
+        mainPane = new HBox(); 
+        buildMainPane();
+        game = new ControllerTetris(this);
+        
     } // ArcadeTetrisView(ArcadeApp)
 
     /**
@@ -40,8 +48,13 @@ public class ArcadeTetrisView {
     private void buildMainPane() {
         score = new Label("Score: 0");
         level = new Label("Level: ");
+        String tempHelp = "Use the left, right, and down keys to move the tetriminos.";
+        String tempHelp2 = "Use the up key to rotate the tetriminos.";
+        help = new Label("How to play: \n" + tempHelp + tempHelp2);
         nextPane = new gridPane();
+        nextPane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
         gamePane = new gridPane();
+        gamePane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
         restart = new Button("Restart");
         quit = new Button("Quit");
         quitGame(quit);
@@ -52,6 +65,10 @@ public class ArcadeTetrisView {
             .addAll(gameSide, statSide);
     } // buildMainPane
     
+    /** 
+    * displays a pop-up when the player loses
+    * score the score the user earned
+    */
     public void lose(Score score){
         warning.setTitle("FOOL!");
         warning.setHeaderText(null);
@@ -60,7 +77,8 @@ public class ArcadeTetrisView {
          Platform.runLater(() -> {warning.showAndWait();});
     }// lose
     
-    /** builds the tetris board
+    /** 
+    * builds the tetris board
     * @param board the board object to be displayed
     */
     public void buildBoard(TetrisBoard board){
@@ -76,27 +94,30 @@ public class ArcadeTetrisView {
         }// for
     }// buildBoard
     
-    /** boots user to game select when clicking quit button
+    /** 
+    * boots user to game select when clicking quit button
     * @param button the user has to click to get booted to the game select
     */
     private void quitGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
-            ArcadeApp view = new ArcadeApp(this);
-            stage.setScene(new Scene(view.asParent()));
-            stage.sizeToScene();
+            app.setSelectGameScene();
         };
         button.setOnAction(handler);
     }// quitGame
     
+    /** 
+    * restarts the tetris game
+    * @param button the button that needs to be pressed to restart the game
+    */
     private void resetGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
-            ControllerTetris game = new ControllerTetris();
-            game.start(new ArcadeTetrisView());
+            game = new ControllerTetris(this);
         };
         button.setOnAction(handler);
     }// resetGame
     
-    /** builds the grid pane to display the next block
+    /** 
+    * builds the grid pane to display the next block
     * @param piece the piece being displayed
     */
     public void buildNext(TetrisPiece piece){
@@ -111,9 +132,9 @@ public class ArcadeTetrisView {
             }// for
         }// for
         for(int i = 1; i<=4; i++){
-            int tempX = piece.getBlock(i).getColumn();
+            int tempX = piece.getBlock(i).getColumn()-4;
             int tempY = piece.getBlock(i).getRow();
-            Rectangle tempRec = new Rectangle(25.0, 25.0, piece.getBlock(i).getColor();
+            Rectangle tempRec = new Rectangle(25.0, 25.0, piece.getBlock(i).getColor());
             Platform.runLater(() -> {
                     nextPane.add(tempRec, tempX, tempY);
                 });// runLater
@@ -138,7 +159,8 @@ public class ArcadeTetrisView {
         level.setText(levelText);
     }// updateLevel
     
-    /** helper method for build board that simply returns 
+    /** 
+    * helper method for build board that simply returns 
     * a given value to make java think the int is final
     * @param i the value to be returned
     * @return the given value

@@ -2,9 +2,16 @@ package cs1302.arcade;
 
 import javafx.scene.paint.Color;
 
-public class TetrisBoard extends TetrisPiece{
+/** 
+* the internal storage for the tetris board and all of 
+* its methods
+*/
+public class TetrisBoard {
     Color[][] board = new Color[10][20];
     
+    /** 
+    * creates a blank tetris board
+    */
     public TetrisBoard(){
         for(int x = 0; x < 10; x ++){
             for(int y = 0; y < 20; y++){
@@ -61,8 +68,15 @@ public class TetrisBoard extends TetrisPiece{
     }// canShiftLeft
     
     public boolean canAddToTop(TetrisPiece piece){
-        
-    }//hasLost
+        for(int i=1; i<=4; i++){
+            int tempX = piece.getBlock(i).getColumn();
+            int tempY = piece.getBlock(i).getRow();
+            if(board[tempX][tempY] != Color.BLACK){
+                return false;
+            }// if
+        }// for
+        return true;
+    }//canAddToTop
     
     /** moves a piece one space to the left on the board
     */
@@ -172,7 +186,7 @@ public class TetrisBoard extends TetrisPiece{
                 int tempX2 = piece.getBlock(z).getColumn();
                 int tempY2 = piece.getBlock(z).getRow();
                     if(tempX-1 == tempX2 && tempY-1 == tempY2){
-                        samePiece == true;
+                        samePiece = true;
                     }// if
             }// for
             if(!samePiece){

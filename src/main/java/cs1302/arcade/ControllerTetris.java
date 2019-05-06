@@ -1,6 +1,10 @@
 package cs1302.arcade;
 
 import java.util.Random;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
 
 /** 
 * handles all of the surface-level tasks for tetris
@@ -19,7 +23,7 @@ public class ControllerTetris{
     * contains the basic setup and gameflow of tetris
     * @param view the object used to alter's the user's view of the game
     */
-    public void start(ArcadeTetrisView view){
+    public ControllerTetris(ArcadeTetrisView view){
         gameView = view;
         this.setUp();
         
@@ -35,25 +39,27 @@ public class ControllerTetris{
                 this.levelCheck();
                 if(gameBoard.canAddToTop(currentPiece)){
                     gameBoard.addPiece(currentPiece);
-                    
                     gameView.buildBoard(gameBoard);
                 }// if
                 else{
                     falling = false;
                     gameBoard.addPiece(currentPiece);
                     gameView.buildBoard(gameBoard);
-                    gameView.lose(score);
-                    score.resetScore();
-                    gameBoard.resetBoard();
+                    gameView.lose(score.getScore());
                 }// else
             }// if
         }// while
-    }// start
+    }// ControllerTetris
     
+    /** 
+    * checks to see if the level needs to increase
+    */
     private void levelCheck(){
-        if(rowsCleared/10 > level.getLevel()){
-            level.setLevel(level.getLevel()+1);
-            gameView.updateLevel(level.getLevel());
+        if(level.getLevel() < 10){
+            if(rowsCleared/10 > level.getLevel()){
+                level.setLevel(level.getLevel()+1);
+                gameView.updateLevel(level.getLevel());
+            }// if
         }// if
     }// levelCheck
     
@@ -67,6 +73,7 @@ public class ControllerTetris{
     
     /**
     * sets up tetris block falling periodically
+    * @param time used to calculate how much time there is between drops
     */
     private void makeTimeLine(double time){
         Timeline tLine = new Timeline();
@@ -76,7 +83,7 @@ public class ControllerTetris{
                 gameView.buildBoard(gameBoard);
             }// if
         };
-        KeyFrame frame = new KeyFrame(Duration.seconds(3/time), handler);
+        KeyFrame frame = new KeyFrame(Duration.seconds(1.7-(time*.2)), handler);
         tLine.setCycleCount(Timeline.INDEFINITE);
         tLine.getKeyFrames().add(frame);
         tLine.play();
