@@ -1,0 +1,44 @@
+.root {
+
+}
+.empty-tile {
+    -fx-fill: #EEE4DA;
+    -fx-arc-height: 8;
+    -fx-arc-width: 8;
+    -fx-text-fill: "#776e65";
+    -fx-border-radius: 8 8 8 8;
+    -fx-background-radius: 8 8 8 8;
+}
+.tile {
+    -fx-arc-height: 8;
+    -fx-arc-width: 8;
+    -fx-border-radius: 8 8 8 8;
+    -fx-background-radius: 8 8 8 8;
+}
+.tile-text {
+    -fx-font-size: 36;
+    -fx-font-family: "Helvetica";
+    -fx-text-fill: "#776e65";
+}
+.game-label {
+    -fx-font-size: 74;
+    -fx-font-weight: bold;
+    -fx-font-family: "Helvetica";
+    -fx-text-fill: "#776e65";
+}
+.score-box {
+    -fx-background-color: "#8f7a66";
+    -fx-border-radius: 8 8 8 8;
+    -fx-background-radius: 8 8 8 8;
+}
+.score-label {
+    -fx-font-size: 24;
+    -fx-font-family: "Helvetica";
+    -fx-font-weight: bold;
+    -fx-text-fill: "white";
+}
+.button {
+    -fx-font-family: "Helvetica";
+    -fx-font-size: 18;
+    -fx-background-color: #8f7a66;
+}
