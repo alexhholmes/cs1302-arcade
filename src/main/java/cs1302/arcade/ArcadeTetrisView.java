@@ -15,6 +15,9 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.application.Platform;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.Group;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 
 * controls what the user sees while playing tetris
@@ -28,7 +31,10 @@ public class ArcadeTetrisView {
     private GridPane gamePane, nextPane;
     private Button quit, restart; 
     private Alert warning = new Alert(AlertType.ERROR);
+    private Group board;
     ControllerTetris game;
+    
+    private AtomicBoolean keyDisable = new AtomicBoolean(false);
 
     /**
      * Constructs a new Tetris game.
@@ -48,9 +54,10 @@ public class ArcadeTetrisView {
      * game view.
      */
     private void buildMainPane() {
+        board = new Group();
         score = new Label("Score: 0");
-        level = new Label("Level: ");
-        String tempHelp = "Use the left, right, and down keys to move the tetriminos.";
+        level = new Label("Level: 1");
+        String tempHelp = "Use the left, right,\nand down keys to move the tetriminos.\n";
         String tempHelp2 = "Use the up key to rotate the tetriminos.";
         help = new Label("How to play: \n" + tempHelp + tempHelp2);
         nextPane = new GridPane();
@@ -61,7 +68,7 @@ public class ArcadeTetrisView {
         quit = new Button("Quit");
         quitGame(quit);
         gameSide = new VBox(gamePane);
-        statSide = new VBox(score, level, nextPane, restart, quit);
+        statSide = new VBox(score, level, nextPane, restart, quit, help);
         
         mainPane.getChildren()
             .addAll(gameSide, statSide);
@@ -95,6 +102,7 @@ public class ArcadeTetrisView {
             }// for
         }// for
     }// buildBoard
+    
     
     /** 
     * boots user to game select when clicking quit button
@@ -180,5 +188,44 @@ public class ArcadeTetrisView {
     public Parent asParent() {
         return mainPane;
     } // asParent()
+    
+    /**
+     * Return a key event handler that makes a player move that
+     * will move the tetrimino.
+     *
+     * @return the key event handler
+     */
+    private EventHandler<? super KeyEvent> createKeyHandler() {
+        return event -> {
+            System.out.println(event);
+            if (!keyDisable.get()) {
+                keyDisable.set(true);
+                switch (event.getCode()) {
+                    case UP:
+                        game.rotate();
+                        break;
+                    case DOWN:
+                        game.moveDown();
+                        break;
+                    case LEFT:
+                        game.moveLeft();
+                        break;
+                    case RIGHT:
+                        game.moveRight();
+                        break;
+                } // switch
+            }// if
+            board.requestFocus();
+        };
+    } // createKeyHandler()
+    
+    /**
+    * sets the game's controls and focuses after 
+    * the game has been initialized
+    */
+    public void setControls(){
+        board.setOnKeyPressed(createKeyHandler());
+        board.requestFocus();
+    }// setControls
 
 } // ArcadeTetrisView

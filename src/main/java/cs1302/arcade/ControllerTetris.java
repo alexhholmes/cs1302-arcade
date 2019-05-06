@@ -33,7 +33,6 @@ public class ControllerTetris{
         
         this.makeTimeLine(level.getLevel());
         
-        while(true){
             if(gameBoard.canDrop(currentPiece) == false){
                 score.addScore(gameBoard.calcScore());
                 gameView.updateScore(score.getScore());
@@ -44,6 +43,7 @@ public class ControllerTetris{
                 if(gameBoard.canAddToTop(currentPiece)){
                     gameBoard.addPiece(currentPiece);
                     gameView.buildBoard(gameBoard);
+                    gameView.buildNext(nextPiece);
                 }// if
                 else{
                     falling = false;
@@ -52,28 +52,7 @@ public class ControllerTetris{
                     gameView.lose(score);
                 }// else
             }// if
-        }// while
     }// ControllerTetris
-    
-    /** 
-    * checks to see if the level needs to increase
-    */
-    private void levelCheck(){
-        if(level.getLevel() < 10){
-            if(rowsCleared/10 > level.getLevel()){
-                level.setLevel(level.getLevel()+1);
-                gameView.updateLevel(level.getLevel());
-            }// if
-        }// if
-    }// levelCheck
-    
-    /** 
-    * updates the rate in which the tetris pieces fall
-    * @param newTime the new variable used to determine the rate
-    */
-    private void updateTimeLine(double newTime){
-        this.makeTimeLine(newTime);
-    }//updateTimeLine
     
     /**
     * sets up tetris block falling periodically
@@ -92,6 +71,26 @@ public class ControllerTetris{
         tLine.getKeyFrames().add(frame);
         tLine.play();
     }// makeTimeLine
+    
+    /** 
+    * updates the rate in which the tetris pieces fall
+    * @param newTime the new variable used to determine the rate
+    */
+    private void updateTimeLine(double newTime){
+        this.makeTimeLine(newTime);
+    }//updateTimeLine
+    
+    /** 
+    * checks to see if the level needs to increase
+    */
+    private void levelCheck(){
+        if(level.getLevel() < 10){
+            if(rowsCleared/10 > level.getLevel()){
+                level.setLevel(level.getLevel()+1);
+                gameView.updateLevel(level.getLevel());
+            }// if
+        }// if
+    }// levelCheck
     
     /** 
     * calculates the number of rows cleared based off 
@@ -133,6 +132,39 @@ public class ControllerTetris{
         nextPiece = new TetrisPiece(random.nextInt(7)+1);
         gameBoard.addPiece(currentPiece);
         gameView.buildBoard(gameBoard);
+        gameView.buildNext(nextPiece);
         falling = true;
     }// setUp
+    
+    /**
+    * moves current piece to the left
+    */
+    public void moveLeft(){
+        gameBoard.shiftPieceLeft(currentPiece);
+        gameView.buildBoard(gameBoard);
+    }// moveLeft
+    
+    /**
+    * moves current piece to the right
+    */
+    public void moveRight(){
+        gameBoard.shiftPieceRight(currentPiece);
+        gameView.buildBoard(gameBoard);
+    }// moveLeft
+    
+    /** 
+    * moves the current piece down
+    */
+    public void moveDown(){
+        gameBoard.dropPiece(currentPiece);
+        gameView.buildBoard(gameBoard);
+    }// moveDown
+    
+    /**
+    * rotates the current piece
+    */
+    public void rotate(){
+        gameBoard.rotatePiece(currentPiece);
+        gameView.buildBoard(gameBoard);
+    }// rotate
 }// ControllerTetris
