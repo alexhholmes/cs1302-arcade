@@ -15,7 +15,7 @@ public class TetrisLevel {
      * Initializes level property
      */
     public TetrisLevel() {
-        score = new SimpleIntegerProperty();
+        level = new SimpleIntegerProperty();
     } // TetrisLevel()
 
     /**
