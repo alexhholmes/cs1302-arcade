@@ -1,11 +1,12 @@
-.root {
-
+.board {
+    -fx-background-color: #776e65;
+    -fx-border-radius: 8 8 8 8;
+    -fx-background-radius: 8 8 8 8;
 }
 .empty-tile {
-    -fx-fill: #EEE4DA;
+    -fx-fill: #CDC1B4;
     -fx-arc-height: 8;
     -fx-arc-width: 8;
-    -fx-text-fill: "#776e65";
     -fx-border-radius: 8 8 8 8;
     -fx-background-radius: 8 8 8 8;
 }

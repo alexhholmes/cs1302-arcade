@@ -132,40 +132,40 @@ public class Tile extends StackPane {
                 this.setVisible(false);
                 break;
             case 2:
-                agent.setFill(Color.web("#F2B179"));
-                break;
-            case 4:
                 agent.setFill(Color.web("#EEE4DA"));
                 break;
+            case 4:
+                agent.setFill(Color.web("#EDE0C8"));
+                break;
             case 8:
-                agent.setFill(Color.web("#F2B179"));
+                agent.setFill(Color.web("#F2b179"));
                 break;
             case 16:
-                agent.setFill(Color.web("#F2B179"));
+                agent.setFill(Color.web("#F59563"));
                 break;
             case 32:
-                agent.setFill(Color.web("#F2B179"));
+                agent.setFill(Color.web("#F67C5F"));
                 break;
             case 64:
-                agent.setFill(Color.web("#F2B179"));
+                agent.setFill(Color.web("#F65E3B"));
                 break;
             case 128:
                 agent.setFill(Color.web("#EDCF72"));
                 break;
             case 256:
-                agent.setFill(Color.web("#EDCF72"));
+                agent.setFill(Color.web("#EDCC61"));
                 break;
             case 512:
-                agent.setFill(Color.web("#EDCF72"));
+                agent.setFill(Color.web("#EDC850"));
                 break;
             case 1024:
-                agent.setFill(Color.web("#EDCF72"));
+                agent.setFill(Color.web("#EDC53F"));
                 break;
             case 2048:
-                agent.setFill(Color.web("#EDCF72"));
+                agent.setFill(Color.web("#EDC22E"));
                 break;
-            case 4096:
-                agent.setFill(Color.web("#3E3933"));
+            default:
+                agent.setFill(Color.web("#3C3A32"));
                 break;
         } // switch
     } // setColor(int)
