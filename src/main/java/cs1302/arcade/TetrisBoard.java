@@ -31,6 +31,16 @@ public class TetrisBoard {
         }// for
     }// resetBoard
     
+    /** 
+    * returns the color in the given coordinance
+    * @param x the desired column
+    * @param y the desired row
+    * @return the color in the given spot
+    */
+    public Color getValue(int x, int y){
+        return board[x][y];
+    }// getValue
+    
     /**
     * Sets a specific block to a desired color
     * @param color desired color
@@ -80,11 +90,11 @@ public class TetrisBoard {
     
     /** moves a piece one space to the left on the board
     */
-    public void shiftPieceLeft(){
+    public void shiftPieceLeft(TetrisPiece piece){
         if(this.canShiftLeft(piece)){
-            this.remove(piece);
+            this.removePiece(piece);
             piece.shiftLeft();
-            this.add(piece);
+            this.addPiece(piece);
         }// if
     }//shiftPieceLeft
     
@@ -116,11 +126,11 @@ public class TetrisBoard {
     
     /** moves a piece one space to the right on the board
     */
-    public void shiftPieceLeft(){
+    public void shiftPieceRight(TetrisPiece piece){
         if(this.canShiftRight(piece)){
-            this.remove(piece);
+            this.removePiece(piece);
             piece.shiftRight();
-            this.add(piece);
+            this.addPiece(piece);
         }// if
     }//shiftPieceRight
     
@@ -144,7 +154,7 @@ public class TetrisBoard {
     public void shiftDown(int rowCleared, int rowsCleared){
         this.rowClear(rowCleared, rowsCleared);
         for(int i = 0; i < 10; i++){
-            board[i][rowCleared] = board[x][rowCleared - rowsCleared];
+            board[i][rowCleared] = board[i][rowCleared - rowsCleared];
         }// for
     }// shiftDown
     
@@ -165,7 +175,7 @@ public class TetrisBoard {
     /** removes a desired piece from the board
     * @param piece to be removed
     */
-    public void removePiece(tetrisPiece piece){
+    public void removePiece(TetrisPiece piece){
         for(int i = 0; i < 4; i++){
             int tempX = piece.getBlock(i).getColumn();
             int tempY = piece.getBlock(i).getRow();
@@ -254,11 +264,9 @@ public class TetrisBoard {
         switch(numCleared){
             case 4:{
                 return 1200;
-                break;
             }// 4
             case 1:{
                 return 40;
-                break;
             }// 1
             case 3: {
                 if(cleared[1] == false || cleared[2] == false){
@@ -267,7 +275,6 @@ public class TetrisBoard {
                 else{
                     return 300;
                 }// else
-                break;
             }// 3
             case 2: {
                 if((cleared[0]==false&&cleared[1]==false)||
@@ -277,7 +284,6 @@ public class TetrisBoard {
                 else{
                     return 80;
                 }// else
-                break;
             }// 2
             default:{
                 return 0;
@@ -326,7 +332,7 @@ public class TetrisBoard {
         if(this.canRotate(piece)){
             this.removePiece(piece);
             piece.rotate();
-            this.add(piece);
+            this.addPiece(piece);
         }// if
     }// rotate
 }// TetrisBoard

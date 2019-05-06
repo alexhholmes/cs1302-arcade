@@ -12,7 +12,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.application.Platform;
 
 /** 
 * controls what the user sees while playing tetris
@@ -51,9 +53,9 @@ public class ArcadeTetrisView {
         String tempHelp = "Use the left, right, and down keys to move the tetriminos.";
         String tempHelp2 = "Use the up key to rotate the tetriminos.";
         help = new Label("How to play: \n" + tempHelp + tempHelp2);
-        nextPane = new gridPane();
+        nextPane = new GridPane();
         nextPane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
-        gamePane = new gridPane();
+        gamePane = new GridPane();
         gamePane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
         restart = new Button("Restart");
         quit = new Button("Quit");
@@ -84,7 +86,7 @@ public class ArcadeTetrisView {
     public void buildBoard(TetrisBoard board){
         for(int x = 0; x<10; x++){
             for(int y = 0; y< 20; y++){
-                Rectangle tempRec = new Rectangle(25.0, 25.0, board[x][y]);
+                Rectangle tempRec = new Rectangle(25.0, 25.0, board.getValue(x,y));
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
                 Platform.runLater(() -> {
@@ -123,7 +125,7 @@ public class ArcadeTetrisView {
     public void buildNext(TetrisPiece piece){
         for(int x = 0; x < 4; x++){
             for(int y = 0; y < 4; y++){
-                Rectangle tempRec = new Rectangle(Color.BLACK);
+                Rectangle tempRec = new Rectangle(25.0, 25.0, Color.BLACK);
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
                 Platform.runLater(() -> {

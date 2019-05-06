@@ -4,6 +4,9 @@ import java.util.Random;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 
 
 /** 
@@ -18,6 +21,7 @@ public class ControllerTetris{
     TetrisPiece currentPiece, nextPiece;
     boolean falling;
     int rowsCleared = 0;
+    Random random = new Random();
     
     /** 
     * contains the basic setup and gameflow of tetris
@@ -27,7 +31,7 @@ public class ControllerTetris{
         gameView = view;
         this.setUp();
         
-        this.makeTimeLine(level);
+        this.makeTimeLine(level.getLevel());
         
         while(true){
             if(gameBoard.canDrop(currentPiece) == false){
@@ -35,7 +39,7 @@ public class ControllerTetris{
                 gameView.updateScore(score.getScore());
                 rowsCleared += this.calcCleared(gameBoard.calcScore());
                 currentPiece = nextPiece;
-                nextPiece = new TetrisPiece(Random.nextInt(7)+1);
+                nextPiece = new TetrisPiece(random.nextInt(7)+1);
                 this.levelCheck();
                 if(gameBoard.canAddToTop(currentPiece)){
                     gameBoard.addPiece(currentPiece);
@@ -45,7 +49,7 @@ public class ControllerTetris{
                     falling = false;
                     gameBoard.addPiece(currentPiece);
                     gameView.buildBoard(gameBoard);
-                    gameView.lose(score.getScore());
+                    gameView.lose(score);
                 }// else
             }// if
         }// while
@@ -125,8 +129,8 @@ public class ControllerTetris{
         level = new TetrisLevel();
         gameBoard = new TetrisBoard();
         gameView.buildBoard(gameBoard);
-        currentPiece = new TetrisPiece(Random.nextInt(7)+1);
-        nextPiece = new TetrisPiece(Random.nextInt(7)+1);
+        currentPiece = new TetrisPiece(random.nextInt(7)+1);
+        nextPiece = new TetrisPiece(random.nextInt(7)+1);
         gameBoard.addPiece(currentPiece);
         gameView.buildBoard(gameBoard);
         falling = true;

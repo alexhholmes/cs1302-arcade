@@ -39,7 +39,7 @@ public class TetrisPiece{
                 break;
             }// case 6
             case 7: {
-                this.makeTPiece();
+                this.makeT();
                 break;
             }// case 7
             default: {
@@ -137,6 +137,9 @@ public class TetrisPiece{
             case 4: {
                 return block4;
             }// case 4
+            default: {
+                return block1;
+            }// default
         }// switch
     }// getBlock
    
