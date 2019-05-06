@@ -1,12 +1,16 @@
 package cs1302.arcade;
 
 import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.layout.GridPane;
-import javafx.control.Label;
-import javafx.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
@@ -45,13 +49,13 @@ public class ArcadeApp extends Application {
      */
     private void buildSelectGameScene() {
         // Image views
-        Image imageTetris = new Image(FILE LOCATION, 100, 100, true, true); // TODO
-        Image image2048 = new Image(FILE LOCATION, 100, 100, true, true); // TODO
+        Image imageTetris = new Image("https://mobimg.b-cdn.net/androidgame_img/tetris/thumbs/tetris.jpg", 100, 100, true, true); // TODO
+        Image image2048 = new Image("https://i2.wp.com/healthybrains.org/wp-content/uploads/2018/07/wsi-imageoptim-2048game.png?fit=475%2C300&ssl=1", 100, 100, true, true); // TODO
         ImageView imageViewTetris = new ImageView(imageTetris);
         ImageView imageView2048 = new ImageView(image2048);
         // Buttons
-        Button buttonTetris = new Button(imageTetris);
-        Button button2048 = new Button(image2048);
+        Button buttonTetris = new Button();
+        Button button2048 = new Button();
         buttonTetris.setGraphic(imageViewTetris);
         button2048.setGraphic(imageView2048);
         startTetrisEvent(buttonTetris);
@@ -84,8 +88,11 @@ public class ArcadeApp extends Application {
     private void start2048Event(Button button) {
         EventHandler<ActionEvent> handler = event -> {
             Arcade2048View view = new Arcade2048View(this);
-            stage.setScene(new Scene(view.asParent()));
+            Scene scene = new Scene(view.asParent());
+            scene.getStylesheets().add("style2048.css");
+            stage.setScene(scene);
             stage.sizeToScene();
+            view.setControls();
         };
         button.setOnAction(handler);
     } // start2048Event(Button)
@@ -97,9 +104,9 @@ public class ArcadeApp extends Application {
      */
     private void startTetrisEvent(Button button) {
         EventHandler<ActionEvent> handler = event -> {
-            ArcadeTetrisView view = new ArcadeTetrisView(this);
-            stage.setScene(new Scene(view.asParent()));
-            stage.sizeToScene();
+            // ArcadeTetrisView view = new ArcadeTetrisView(this);
+            // stage.setScene(new Scene(view.asParent()));
+            // stage.sizeToScene();
         };
         button.setOnAction(handler);
     } // startTetrisEvent(Button)

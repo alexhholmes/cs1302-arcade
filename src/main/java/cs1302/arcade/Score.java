@@ -24,9 +24,18 @@ public class Score {
      *
      * @return this model's score property.
      */
-    public ReadOnlyIntegerProperty scoreProperty() {
+    public IntegerProperty scoreProperty() {
         return this.score;
     } // scoreProperty()
+
+    /**
+     * Returns the value of this score.
+     *
+     * @return the value of this score
+     */
+    public int getScore() {
+        return score.getValue();
+    }
 
     /**
      * Adds the given value to the current score.

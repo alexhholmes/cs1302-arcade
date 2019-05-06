@@ -1,35 +1,46 @@
 package cs1302.arcade;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The UI elements of a 2048 game.
  */
 public class Arcade2048View {
 
-    private static final double TILE_HEIGHT = 100;
-    private static final double TILE_WIDTH = 100;
-    
     private ArcadeApp app;
-    private VBox root;
-    private GridPane gridPane;
-    private MenuBar menuBar;
+    private GridPane root;
+    private Label gameLabel;
     private VBox scoreVBox;
+    private HBox buttonBox;
     private Group board;
+    private Text text;
 
     private Score score;
     private Model2048 boardModel;
     private Controller2048 controller;
 
-    private boolean keyDisable = false;
-    
+    private AtomicBoolean keyDisable = new AtomicBoolean(false);
+
     /**
      * Starts a new game of 2048.
      */
@@ -38,79 +49,56 @@ public class Arcade2048View {
         this.app = app;
         score = new Score();
         boardModel = new Model2048();
-        controller = new Controller2048(boardModel, score);
-        
+        controller = new Controller2048(boardModel, score, this);
+
         // Build UI
         buildView();
-        // Game controls
-        board.setKeyPressed(createKeyHandler());
-        board.requestFocus();
     } // Arcade2048View(ArcadeApp)
+
+    /**
+     * For the main application to set this game's controls and focus
+     * after the scene has been initialized.
+     */
+    public void setControls() {
+        board.setOnKeyPressed(createKeyHandler());
+        board.requestFocus();
+    } // setControls()
 
     /**
      * Builds the game view.
      */
     public void buildView() {
-        // Components
-        buildMenuBar();
         buildGameLabel();
         buildScore();
+        buildButtons();
         buildBoard();
+        buildHelpText();
         // GridPane
-        gridPane = new GridPane();
-        gridPane.add(gameLabel, 0, 0, 1, 1);
-        gridPane.add(scoreVBox, 1, 0, 1, 1);
-        gridPane.add(board, 0, 1, 2, 1);
-        gridPane.setHAlignment(gameLabel, HPos.Center);
-        gridPane.setVAlignment(gameLabel, VPos.Center);
-        gridPane.setHAlignment(scoreVBox, HPos.Center);
-        gridPane.setVAlignment(scoreVBox, VPos.Center);
-        GridPane.setHGrow(gameLabel, Priority.ALWAYS);
-        GridPane.setHGrow(scoreVBox, Priority.ALWAYS);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        // Root
-        root = new VBox();
-        root.getChildren()
-            .addAll(menuBar, gridPane);
+        root = new GridPane();
+        root.add(gameLabel, 0, 0, 1, 1);
+        root.add(scoreVBox, 1, 0, 1, 1);
+        root.add(buttonBox, 1, 1, 1, 1);
+        root.add(board, 0, 2, 2, 1);
+        root.add(text, 0, 3, 1, 1);
+        GridPane.setValignment(gameLabel, VPos.TOP);
+        GridPane.setHalignment(gameLabel, HPos.LEFT);
+        GridPane.setValignment(scoreVBox, VPos.TOP);
+        GridPane.setHalignment(scoreVBox, HPos.RIGHT);
+        GridPane.setValignment(buttonBox, VPos.CENTER);
+        GridPane.setHalignment(buttonBox, HPos.RIGHT);
+        GridPane.setHgrow(scoreVBox, Priority.NEVER);
+        GridPane.setVgrow(scoreVBox, Priority.NEVER);
+        root.setPadding(new Insets(8));
+        root.setHgap(8);
+        root.setVgap(8);
     } // buildView()
-
-    /**
-     * Builds the menu bar.
-     */
-    private void buildMenuBar() {
-        menuBar = new MenuBar();
-        Menu gameMenu = new Menu("Game");
-        Menu helpMenu = new Menu("Help");
-        MenuItem resetItem = new MenuItem("Reset Game");
-        MenuItem exitItem = new MenuItem("Exit Game");
-        MenuItem helpItem = new MenuItem("How to Play");
-        gameMenu.getItems()
-            .addAll(resetItem, highScoresItem, exitItem);
-        helpMenu.getItems()
-            .addAll(helpItem);
-        menuBar.getChildren()
-            .addAll(gameMenu, helpMenu);
-        // MenuItem event handlers
-        EventHandler<ActionEvent> resetHandler = event -> {
-            controller.reset();
-        };
-        EventHandler<ActionEvent> exitHandler = event -> {
-            app.setSelectGameScene();
-        };
-        EventHandler<ActionEvent> helpHandler = event -> {
-            displayHelpWindow();
-        };
-        resetItem.setOnAction(resetHandler);
-        exitItem.setOnAction(exitHandler);
-        helpItem.setOnAction(helpHandler);
-    } // buildMenuBar()
 
     /**
      * Builds the 2048 game label.
      */
     private void buildGameLabel() {
-        Label gameLabel = new Label("2048");
+        gameLabel = new Label("2048");
+        gameLabel.getStyleClass().add("game-label");
     } // buildGameLabel()
 
     /**
@@ -120,79 +108,146 @@ public class Arcade2048View {
         scoreVBox = new VBox(4);
         Label scoreTitle = new Label("Score:");
         Label scoreLabel = new Label();
-        scoreLabel.textProperty().bind(model.scoreProperty());
+        scoreTitle.getStyleClass().add("score-label");
+        scoreLabel.getStyleClass().add("score-label");
+        scoreLabel.textProperty().bind(score.scoreProperty().asString());
         scoreVBox.getChildren()
             .addAll(scoreTitle, scoreLabel);
-        scoreVbox.setAlignment(Pos.CENTER);
+        scoreVBox.setAlignment(Pos.CENTER);
+        scoreVBox.setMinWidth(200);
+        scoreVBox.getStyleClass().add("score-box");
     } // buildScore()
+
+    /**
+     * Builds the buttons.
+     */
+    private void buildButtons() {
+        Button restartButton = new Button("Restart") {
+            public void requestFocus() {}
+        };
+        Button quitButton = new Button("Quit") {
+            public void requestFocus() {}
+        };
+        restartButton.getStyleClass().add("button");
+        quitButton.getStyleClass().add("button");
+        restartButton.setOnAction(restartHandler());
+        quitButton.setOnAction(quitHandler());
+        buttonBox = new HBox();
+        buttonBox.getChildren().addAll(restartButton, quitButton);
+        buttonBox.setSpacing(8);
+    } // buildButtons()
 
     /**
      * Builds the game board.
      */
     private void buildBoard() {
         board = new Group();
-        board.minHeight(450);
-        board.minWidth(450);
-        for (int row = 0; row < board.getRows(); row++) {
-            for (int col = 0; col < board.getCols(); col++) {
-                Tile tile = board.getTile(row, col);
-                TileView tileView = new TileView();
-                tileView.xProperty().bind(tile.xProperty);
-                tileView.yProperty().bind(tile.yProperty);
-                tileView.textProperty().bind(tile.valueProperty().asString());
-                tile.valueProperty().addListener((obs, oldValue, newValue) ->
-                    (tileView.setFill(tile.getColor()));
-                board.getChildren.add(tile);
-            } // for
-        } // for
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 4; col++) {
+                // Blank tiles
+                Rectangle blankTile = new Rectangle(100, 100);
+                blankTile.setX(col * 100 + 20 * col);
+                blankTile.setY(row * 100 + 20 * row);
+                blankTile.getStyleClass().add("empty-tile");
+                // Game tiles
+                Tile tile = boardModel.getTile(row, col);
+                tile.setTranslateX(col * 100 + 20 * col);
+                tile.setTranslateY(row * 100 + 20 * row);
+                board.getChildren().addAll(blankTile, tile);
+            }
+        }
     } // buildBoard()
 
-    private EventHandler<? super KeyEvent> createKeyHandler() {
-        return event -> {
-            System.out.println(event.getCode());
-            if (!keyDisable) {
-                keyDisable = true;
-                } // switch
-                Thread t = new Thread(() -> {
-                    switch (event.getCode()) {
-                        case KeyCode.UP:
-                            controller.makeMove(Direction.UP);
-                            break;
-                        case KeyCode.DOWN:
-                            controller.makeMove(Direction.DOWN);
-                            break;
-                        case KeyCode.LEFT:
-                            controller.makeMove(Direction.LEFT);
-                            break;
-                        case KeyCode.RIGHT:
-                            controller.makeMove(Direction.RIGHT);
-                            break;
-                    makeMove(direction);
-                });
-                thread.setDaemon(true);
-                thread.start();
-                if (controller.isGameOver()) {
-                    displayGameOver();
-                } else {
-                    keyDisable = false;
-                } // if
-            } // if
-        };
-    } // createKeyHandler()
+    /**
+     * Builds the help text.
+     */
+    private void buildHelpText() {
+        String helpText = "How to Play:\n" +
+            "Use the arrow keys to move the tiles.\n" +
+            "Tiles will merge together if they are equal\nnumbers. " +
+            "Try to get the highest score\nyou can!";
+        text = new Text(helpText);
+    } // buildHelpText()
 
     /**
      * Displays a game over screen when the game is complete.
      */
     private void displayGameOver() {
-        
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(app.stage);
+        VBox root = new VBox();
+        Text text = new Text("Game Over!\n +" +
+                "Your score: " + score.getScore());
+        Button button = new Button("Play Again");
+        button.setOnAction(event -> {
+            controller.reset();
+            dialog.close();
+            keyDisable.set(false);
+        });
+        root.getChildren().addAll(text, button);
     } // displayGameOver()
 
     /**
-     * Displays the rules of the game and its controls.
+     * Returns an event handler to restart the game.
+     *
+     * @return an event handler to restart the game
      */
-    private void displayHelpWindow() {
+    private EventHandler<ActionEvent> quitHandler() {
+        EventHandler<ActionEvent> handler = event -> {
+            app.setSelectGameScene();
+        };
+        return handler;
+    } // quitHandler()
 
-    } // displayHelpWindow()
+    /**
+     * Returns an event handler to restart the game.
+     *
+     * @return an event handler to restart the game
+     */
+    private EventHandler<ActionEvent> restartHandler() {
+        EventHandler<ActionEvent> handler = event -> {
+            controller.reset();
+            keyDisable.set(false);
+        };
+        return handler;
+    } // quitHandler()
+
+    /**
+     * Return a key event handler that makes a player move that
+     * will shift the tiles on the board.
+     *
+     * @return the key event handler
+     */
+    private EventHandler<? super KeyEvent> createKeyHandler() {
+        return event -> {
+            System.out.println(event);
+            if (!keyDisable.get()) {
+                keyDisable.set(true);
+                switch (event.getCode()) {
+                    case UP:
+                        controller.makeMove(Direction.UP);
+                        break;
+                    case DOWN:
+                        controller.makeMove(Direction.DOWN);
+                        break;
+                    case LEFT:
+                        controller.makeMove(Direction.LEFT);
+                        break;
+                    case RIGHT:
+                        controller.makeMove(Direction.RIGHT);
+                        break;
+                } // switch
+                // Check if game is over after move is executed
+                if (controller.isGameOver()) {
+                    displayGameOver();
+                } else {
+                    keyDisable.set(false);
+                } // if
+            } // if
+            board.requestFocus();
+        };
+    } // createKeyHandler()
 
     /**
      * Returns the root node of this game as a {@code Parent}.

@@ -6,7 +6,7 @@ import java.util.Random;
  * A model for a 2048 game board.
  */
 public class Model2048 {
-    
+
     /** Number of board rows */
     private static final int ROWS = 4;
     /** Number of board columns */
@@ -14,7 +14,7 @@ public class Model2048 {
 
     /** The game board */
     private Tile[][] board = new Tile[ROWS][COLS];
-    
+
     /**
      * Sets the initial board model for the 2048 game.
      */
@@ -24,6 +24,8 @@ public class Model2048 {
                 board[row][col] = new Tile();
             } // for
         } // for
+        setRandomTile();
+        setRandomTile();
     } // Model2048()
 
     /**
@@ -65,7 +67,7 @@ public class Model2048 {
     } // getCols()
 
     /**
-     * Resets the board.
+     * Resets the board and sets two random tiles.
      */
     public void resetBoard() {
         for (int row = 0; row < ROWS; row++) {
@@ -73,6 +75,8 @@ public class Model2048 {
                 board[row][col].resetTile();
             } // for
         } // for
+        setRandomTile();
+        setRandomTile();
     } // resetBoard()
 
     /**
@@ -93,46 +97,47 @@ public class Model2048 {
 
     /**
      * Returns true if the tile at the specified location has a value equal to
-     * all of its neighbors.
+     * any of its neighbors.
      *
      * @param row the row of the tile
      * @param col the column of the tile
-     * @return true if the tile is equal to all its neighbors
+     * @return true if the tile is equal to any its neighbors
      */
     public boolean checkNeighborsMatch(int row, int col) {
         if (row - 1 >= 0) {
-            if (!getTile(row, col).matches(getTile(row - 1, col))) {
-                return false;
+            if (getTile(row, col).matches(getTile(row - 1, col))) {
+                return true;
             } // if
         } // if
         if (row + 1 < ROWS) {
-            if (!getTile(row, col).matches(getTile(row + 1, col))) {
-                return false;
+            if (getTile(row, col).matches(getTile(row + 1, col))) {
+                return true;
             } // if
         } // if
         if (col - 1 >= 0) {
-            if (!getTile(row, col).matches(getTile(row, col - 1))) {
-                return false;
+            if (getTile(row, col).matches(getTile(row, col - 1))) {
+                return true;
             } // if
         } // if
         if (col + 1 < COLS) {
-            if (!getTile(row, col).matches(getTile(row, col + 1))) {
-                return false;
+            if (getTile(row, col).matches(getTile(row, col + 1))) {
+                return true;
             } // if
         } // if
-        return true;
+        return false;
     } // checkNeighborsMatch(int, int)
 
     /**
      * Sets a random tile on the board to a new random value.
      */
     public void setRandomTile() {
+        Random random = new Random();
         while (true) {
-            Random random = new Random();
-            int randRow = random.nextInt(ROWS - 1);
-            int randCol = random.nextInt(COLS - 1);
-            if (!getTile(randRow, randCol).isEmpty()) {
+            int randRow = random.nextInt(ROWS);
+            int randCol = random.nextInt(COLS);
+            if (getTile(randRow, randCol).isEmpty()) {
                 getTile(randRow, randCol).setRandomValue();
+                break;
             } // if
         } // while
     } // setRandomTile

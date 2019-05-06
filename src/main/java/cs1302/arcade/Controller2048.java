@@ -7,15 +7,17 @@ public class Controller2048 {
 
     private Model2048 board;
     private Score score;
+    private Arcade2048View view;
     private boolean gameOver;
     private boolean validMove;
 
     /**
      * Starts a new game of 2048.
      */
-    public Controller2048(Model2048 boardModel, Score score) {
-        this.boardModel = boardModel;
+    public Controller2048(Model2048 board, Score score, Arcade2048View view) {
+        this.board = board;
         this.score = score;
+        this.view = view;
         gameOver = false;
         validMove = false;
     } // Controller2048(Model2048, Score)
@@ -29,27 +31,27 @@ public class Controller2048 {
      */
     public void makeMove(Direction direction) {
         switch (direction) {
-            case Direction.UP:
+            case UP:
                 moveUp();
                 break;
-            case Direction.DOWN:
+            case DOWN:
                 moveDown();
                 break;
-            case Direction.LEFT:
+            case LEFT:
                 moveLeft();
                 break;
-            case Direction.RIGHT:
+            case RIGHT:
                 moveRight();
                 break;
         } // switch
-        // Set random tile, view must check if game is over after the move has
-        // been executed
+        // Set random tile
         if (validMove) {
             board.setRandomTile();
             validMove = false;
-        } // if
-        if (checkGameOver) {
-            gameOver = true;
+            // View must check if game is over after the move has been executed
+            if (checkGameOver()) {
+                gameOver = true;
+            } // if
         } // if
     } // makeMove()
 
@@ -57,49 +59,49 @@ public class Controller2048 {
      * Shifts board tiles in the up direction.
      */
     private void moveUp() {
-        Tile[] tiles = new Tile[board.getRows()];
         for (int col = 0; col < board.getCols(); col++) {
+            Tile[] tiles = new Tile[board.getRows()];
             for (int row = 0; row < board.getRows(); row++) {
                 tiles[row] = board.getTile(row, col);
             } // for
             shiftTiles(tiles);
         } // for
     } // moveUp()
-    
+
     /**
      * Shifts board tiles in the down direction.
      */
     private void moveDown() {
-        Tile[] tiles = new Tile[board.getRows()];
         for (int col = 0; col < board.getCols(); col++) {
-            for (int row = board.getRows(); row >= 0; row--) {
-                tiles[row] = board.getTile(row, col);
+            Tile[] tiles = new Tile[board.getRows()];
+            for (int row = board.getRows() - 1; row >= 0; row--) {
+                tiles[Math.abs(row - 3)] = board.getTile(row, col);
             } // for
             shiftTiles(tiles);
         } // for
     } // moveDown()
-    
+
     /**
      * Shifts board tiles in the left direction.
      */
     private void moveLeft() {
-        Tile[] tiles = new Tile[board.getCols()];
         for (int row = 0; row < board.getRows(); row++) {
+            Tile[] tiles = new Tile[board.getCols()];
             for (int col = 0; col < board.getCols(); col++) {
                 tiles[col] = board.getTile(row, col);
             } // for
             shiftTiles(tiles);
         } // for
     } // moveLeft()
-    
+
     /**
      * Shifts board tiles in the right direction.
      */
     private void moveRight() {
-        Tile[] tiles = new Tile[board.getCols()];
         for (int row = 0; row < board.getRows(); row++) {
-            for (int col = board.getCols(); col >= 0; col--) {
-                tiles[col] = board.getTile(row, col);
+            Tile[] tiles = new Tile[board.getCols()];
+            for (int col = board.getCols() - 1; col >= 0; col--) {
+                tiles[Math.abs(col - 3)] = board.getTile(row, col);
             } // for
             shiftTiles(tiles);
         } // for
@@ -112,26 +114,27 @@ public class Controller2048 {
      */
     private void shiftTiles(Tile[] tiles) {
         // Pointer to the previous tile that will be checked for merging
-        Tile prev = tiles[0];
+        int prev = 0;
         for (int i = 1; i < tiles.length; i++) {
             // If tile is not zero, then it can be checked for shifting down
             if (tiles[i].getValue() != 0) {
                 // If the pointer and current tile are equal then merge and add score
                 // Else if the pointer is zero then merge without adding score
-                // Else move pointer to current tile and do not shift down tiles
-                if (prev.getValue() == tiles[i].getValue()) {
-                    int score = prev.merge(tiles[i]);
-                    tiles[i].reset();
-                    prev = tiles[i];
-                    score.addScore(score);
+                // Else move pointer up one and shift down if there is a blank space
+                if (tiles[prev].getValue() == tiles[i].getValue()) {
+                    int score = tiles[prev].mergeTile(tiles[i]);
+                    prev++;
+                    this.score.addScore(score);
                     validMove = true;
-                } else if (prev.getValue() == 0) {
-                    prev.merge(tiles[i]);
-                    tiles[i].reset();
-                    prev = tiles[i];
+                } else if (tiles[prev].getValue() == 0) {
+                    tiles[prev].mergeTile(tiles[i]);
                     validMove = true;
                 } else {
-                    prev = tiles[i];
+                    if (prev + 1 != i) {
+                        tiles[prev + 1].mergeTile(tiles[i]);
+                        validMove = true;
+                    }
+                    prev++;
                 } // if
             } // if
         } // for
@@ -164,13 +167,15 @@ public class Controller2048 {
         } // if
         return false;
     } // checkGameOver()
-    
+
     /**
      * Resets the game to the starting state.
      */
     public void reset() {
-        boardModel.resetBoard();
+        board.resetBoard();
         score.resetScore();
+        gameOver = false;
+        validMove = false;
     } // reset()
 
 } // Controller2048

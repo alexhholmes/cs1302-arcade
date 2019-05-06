@@ -1,47 +1,50 @@
 package cs1302.arcade;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+
 import java.util.Random;
 
 /**
  * A model representing a 2048 game tile.
  */
-public class Tile {
+public class Tile extends StackPane {
 
-    /** Value of this tile */
-    private IntegerProperty value = new SimpleIntegerProperty();
-    /** X Coordinate */
-    private DoubleProperty x = new SimpleDoubleProperty();
-    /** Y Coordinate */
-    private DoubleProperty y = new SimpleDoubleProperty();
-    /** Color of this tile */
-    private Color color;
+    /** Tile Height */
+    private static final double TILE_HEIGHT = 100;
+    /** Tile Width */
+    private static final double TILE_WIDTH = 100;
+
+    /** Tile Body */
+    private Rectangle agent = new Rectangle();
+    /** Tile Text */
+    private Text text = new Text();
+
+    /** The value of this tile */
+    private int value;
 
     /**
      * Constructs a new tile with a value of zero.
      */
     public Tile() {
+        agent.setHeight(TILE_HEIGHT);
+        agent.setWidth(TILE_WIDTH);
+        agent.setArcHeight(8);
+        agent.setArcWidth(8);
+        text.getStyleClass().add("tile-text");
+        this.getChildren().addAll(agent, text);
         resetTile();
     } // Tile()
-    
+
     /**
      * Constructs a new tile with the specified value.
      */
     public Tile(int value) {
-        this.value.setValue(value);
-        setColor(value);
+        this();
+        setValue(value);
     } // Tile(int)
-
-    /**
-     * Returns the value property of this tile.
-     *
-     * @return the value property
-     */
-    public IntegerProperty valueProperty() {
-        return value;
-    } // valueProperty()
 
     /**
      * Returns the int value of this tile.
@@ -49,7 +52,7 @@ public class Tile {
      * @return the int value
      */
     public int getValue() {
-        return value.getValue();
+        return value;
     } // getValue()
 
     /**
@@ -57,63 +60,10 @@ public class Tile {
      * of this tile.
      */
     private void setValue(int value) {
-        value.setValue(value);
-        setColor(value);
+        this.value = value;
+        text.setText(Integer.toString(value));
+        updateColor();
     } // setValue(int)
-
-    /**
-     * Returns the x property of this tile.
-     *
-     * @return the x property
-     */
-    public DoubleProperty xProperty() {
-        return x;
-    } // xProperty()
-
-    /**
-     * Returns the x value of this tile.
-     *
-     * @return the x value
-     */
-    public double getX() {
-        return x.getValue()
-    } // getX()
-
-    /**
-     * Sets the x to the specified value.
-     *
-     * @param x the x coordinate of this tile
-     */
-    public void setX(double x) {
-        this.x.setValue(x);
-    } // setX(double)
-
-    /**
-     * Returns the y property of this tile.
-     *
-     * @return the y property
-     */
-    public DoubleProperty yProperty() {
-        return y;
-    } // yProperty()
-
-    /**
-     * Returns the y value of this tile.
-     *
-     * @return the y value
-     */
-    public double getY() {
-        return x.getValue()
-    } // getY()
-
-    /**
-     * Sets the y to the specified value.
-     *
-     * @param y the y coordinate of this tile
-     */
-    public void setY(double y) {
-        this.y.setValue(y);
-    } // setY(double)
 
     /**
      * Sums the value of this tile with a tile that it is merging with.
@@ -122,27 +72,24 @@ public class Tile {
      * @return the new value of this tile
      */
     public int mergeTile(Tile tile) {
-        value.setValue(getValue() + tile.getValue());
+        setValue(getValue() + tile.getValue());
+        tile.resetTile();
         return getValue();
     } // mergeTile(Tile)
 
     /**
-     * Randomly sets this tile to either 2 or 4.
+     * Randomly sets this tile to either 2 or 4 with a 90% chance of
+     * it being a value of 2.
      */
     public void setRandomValue() {
         Random random = new Random();
-        int num = (rand.nextInt(1) + 1) * 2;
-        setValue(num);
+        double num = random.nextDouble();
+        if (num < 0.9) {
+            setValue(2);
+        } else {
+            setValue(4);
+        }
     } // setRandomValue()
-
-    /**
-     * Returns the color of this tile.
-     *
-     * @return the color of this tile
-     */
-    public Color getColor() {
-        return color;
-    } // getColor()
 
     /**
      * Resets the value of this tile to zero.
@@ -158,7 +105,7 @@ public class Tile {
      * @return true if this tile matches the given tile
      */
     public boolean matches(Tile tile) {
-        if (getValue() == tile.getValue) {
+        if (getValue() == tile.getValue()) {
             return true;
         } // if
         return false;
@@ -174,50 +121,51 @@ public class Tile {
     } // isEmpty()
 
     /**
-     * Sets the color of this tile based on the paramater value.
-     *
-     * @param value the value of this tile
+     * Updates the color of this tile based on this tile's value.
      */
-    private void setColor(int value) {
-        // TODO fix colors
-        switch (value) {
+    private void updateColor() {
+        if (getValue() != 0) {
+            this.setVisible(true);
+        } // if
+        switch (getValue()) {
             case 0:
-                color = Color.web("#CCC0B3");
+                this.setVisible(false);
+                break;
             case 2:
-                color = Color.web("#EEE4DA");
+                agent.setFill(Color.web("#F2B179"));
                 break;
             case 4:
-                color = Color.web("#EEE4DA");
+                agent.setFill(Color.web("#EEE4DA"));
                 break;
             case 8:
-                color = Color.web("#F2B179");
+                agent.setFill(Color.web("#F2B179"));
                 break;
             case 16:
-                color = Color.web("#F2B179");
+                agent.setFill(Color.web("#F2B179"));
                 break;
             case 32:
-                color = Color.web("#F2B179");
+                agent.setFill(Color.web("#F2B179"));
                 break;
             case 64:
-                color = Color.web("#F2B179");
+                agent.setFill(Color.web("#F2B179"));
                 break;
             case 128:
-                color = Color.web("#EDCF72");
+                agent.setFill(Color.web("#EDCF72"));
                 break;
             case 256:
-                color = Color.web("#EDCF72");
+                agent.setFill(Color.web("#EDCF72"));
                 break;
             case 512:
-                color = Color.web("#EDCF72");
+                agent.setFill(Color.web("#EDCF72"));
                 break;
             case 1024:
-                color = Color.web("#EDCF72");
+                agent.setFill(Color.web("#EDCF72"));
                 break;
             case 2048:
-                color = Color.web("#EDCF72");
+                agent.setFill(Color.web("#EDCF72"));
                 break;
             case 4096:
-                color = Color.web("#3E3933");
+                agent.setFill(Color.web("#3E3933"));
                 break;
         } // switch
     } // setColor(int)
