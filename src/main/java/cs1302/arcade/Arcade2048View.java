@@ -9,16 +9,13 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.text.TextAlignment;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,15 +29,18 @@ public class Arcade2048View {
     private Label gameLabel;
     private VBox scoreVBox;
     private HBox buttonBox;
+    private StackPane boardBackground;
     private Group board;
     private Text text;
+    private StackPane gameOverPane;
+    private Text gameOverText;
 
     private Score score;
     private Model2048 boardModel;
     private Controller2048 controller;
 
     private AtomicBoolean keyDisable = new AtomicBoolean(false);
-
+    
     /**
      * Starts a new game of 2048.
      */
@@ -50,7 +50,7 @@ public class Arcade2048View {
         score = new Score();
         boardModel = new Model2048();
         controller = new Controller2048(boardModel, score, this);
-
+        
         // Build UI
         buildView();
     } // Arcade2048View(ArcadeApp)
@@ -73,12 +73,13 @@ public class Arcade2048View {
         buildButtons();
         buildBoard();
         buildHelpText();
+        buildGameOver();
         // GridPane
         root = new GridPane();
         root.add(gameLabel, 0, 0, 1, 1);
         root.add(scoreVBox, 1, 0, 1, 1);
         root.add(buttonBox, 1, 1, 1, 1);
-        root.add(board, 0, 2, 2, 1);
+        root.add(boardBackground, 0, 2, 2, 1);
         root.add(text, 0, 3, 1, 1);
         GridPane.setValignment(gameLabel, VPos.TOP);
         GridPane.setHalignment(gameLabel, HPos.LEFT);
@@ -141,6 +142,9 @@ public class Arcade2048View {
      * Builds the game board.
      */
     private void buildBoard() {
+        boardBackground = new StackPane();
+        boardBackground.getStyleClass().add("board");
+        boardBackground.setPadding(new Insets(20));
         board = new Group();
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
@@ -156,6 +160,8 @@ public class Arcade2048View {
                 board.getChildren().addAll(blankTile, tile);
             }
         }
+        boardBackground.getChildren().add(board);
+        boardBackground.setAlignment(Pos.CENTER);
     } // buildBoard()
 
     /**
@@ -163,29 +169,30 @@ public class Arcade2048View {
      */
     private void buildHelpText() {
         String helpText = "How to Play:\n" +
-            "Use the arrow keys to move the tiles.\n" +
-            "Tiles will merge together if they are equal\nnumbers. " +
-            "Try to get the highest score\nyou can!";
+                "Use the arrow keys to move the tiles.\n" +
+                "Tiles will merge together if they are equal\nnumbers. " +
+                "Try to get the highest score\nyou can!";
         text = new Text(helpText);
     } // buildHelpText()
 
     /**
      * Displays a game over screen when the game is complete.
      */
-    private void displayGameOver() {
-        final Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(app.stage);
-        VBox root = new VBox();
-        Text text = new Text("Game Over!\n +" +
-                "Your score: " + score.getScore());
-        Button button = new Button("Play Again");
-        button.setOnAction(event -> {
-            controller.reset();
-            dialog.close();
-            keyDisable.set(false);
-        });
-        root.getChildren().addAll(text, button);
+    private void buildGameOver() {
+        Rectangle rectangle = new Rectangle(460, 460);
+        rectangle.setArcHeight(8);
+        rectangle.setArcWidth(8);
+        rectangle.setFill(Color.GRAY);
+        rectangle.setOpacity(.2);
+        gameOverText = new Text();
+        gameOverText.setTextAlignment(TextAlignment.CENTER);
+        gameOverText.setStyle("-fx-font-family: Helvetica");
+        gameOverText.setStyle("-fx-font-weight: Bold");
+        gameOverText.setStyle("-fx-font-size: 36");
+        gameOverPane = new StackPane();
+        gameOverPane.getChildren().addAll(rectangle, gameOverText);
+        gameOverPane.setVisible(false);
+        board.getChildren().add(gameOverPane);
     } // displayGameOver()
 
     /**
@@ -209,6 +216,7 @@ public class Arcade2048View {
         EventHandler<ActionEvent> handler = event -> {
             controller.reset();
             keyDisable.set(false);
+            gameOverPane.setVisible(false);
         };
         return handler;
     } // quitHandler()
@@ -240,7 +248,8 @@ public class Arcade2048View {
                 } // switch
                 // Check if game is over after move is executed
                 if (controller.isGameOver()) {
-                    displayGameOver();
+                    gameOverText.setText("GAME OVER!\nYour Score: " + score.getScore());
+                    gameOverPane.setVisible(true);
                 } else {
                     keyDisable.set(false);
                 } // if
