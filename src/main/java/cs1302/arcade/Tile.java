@@ -24,6 +24,8 @@ public class Tile extends StackPane {
 
     /** The value of this tile */
     private int value;
+    /** The future value of this tile */
+    private int futureValue;
 
     /**
      * Constructs a new tile with a value of zero.
@@ -61,9 +63,28 @@ public class Tile extends StackPane {
      */
     private void setValue(int value) {
         this.value = value;
+        futureValue = value;
         text.setText(Integer.toString(value));
         updateColor();
     } // setValue(int)
+
+    /**
+     * Returns the future value of this tile.
+     *
+     * @return the future value of this tile
+     */
+    public int getFutureValue() {
+        return futureValue;
+    } // getFutureValue()
+
+    /**
+     * Sets the future value of this tile to the specified value.
+     *
+     * @param value the future value of this tile
+     */
+    public void setFutureValue(int value) {
+        futureValue = value;
+    } // setFutureValue(int)
 
     /**
      * Sums the value of this tile with a tile that it is merging with.
@@ -88,7 +109,7 @@ public class Tile extends StackPane {
             setValue(2);
         } else {
             setValue(4);
-        }
+        } // if
     } // setRandomValue()
 
     /**

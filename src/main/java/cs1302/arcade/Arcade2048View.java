@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -93,6 +92,15 @@ public class Arcade2048View {
         root.setHgap(8);
         root.setVgap(8);
     } // buildView()
+
+    /**
+     * If set to true, keys are disabled.
+     *
+     * @param keyDisable if true, disables keys
+     */
+    public void setKeyDisable(boolean keyDisable) {
+        this.keyDisable.set(keyDisable);
+    } // setKeyDisable(boolean)
 
     /**
      * Builds the 2048 game label.
@@ -193,7 +201,7 @@ public class Arcade2048View {
         gameOverPane.getChildren().addAll(rectangle, gameOverText);
         gameOverPane.setVisible(false);
         board.getChildren().add(gameOverPane);
-    } // displayGameOver()
+    } // buildGameOver()
 
     /**
      * Returns an event handler to restart the game.
@@ -230,6 +238,12 @@ public class Arcade2048View {
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
             System.out.println(event);
+            // Check if game is over
+            if (controller.isGameOver()) {
+                gameOverText.setText("GAME OVER!\nYour Score: " + score.getScore());
+                gameOverPane.toFront();
+                gameOverPane.setVisible(true);
+            } // if
             if (!keyDisable.get()) {
                 keyDisable.set(true);
                 switch (event.getCode()) {
@@ -246,13 +260,6 @@ public class Arcade2048View {
                         controller.makeMove(Direction.RIGHT);
                         break;
                 } // switch
-                // Check if game is over after move is executed
-                if (controller.isGameOver()) {
-                    gameOverText.setText("GAME OVER!\nYour Score: " + score.getScore());
-                    gameOverPane.setVisible(true);
-                } else {
-                    keyDisable.set(false);
-                } // if
             } // if
             board.requestFocus();
         };
