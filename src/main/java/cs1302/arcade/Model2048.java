@@ -6,7 +6,7 @@ import java.util.Random;
  * A model for a 2048 game board.
  */
 public class Model2048 {
-
+    
     /** Number of board rows */
     private static final int ROWS = 4;
     /** Number of board columns */
@@ -14,7 +14,7 @@ public class Model2048 {
 
     /** The game board */
     private Tile[][] board = new Tile[ROWS][COLS];
-
+    
     /**
      * Sets the initial board model for the 2048 game.
      */

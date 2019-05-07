@@ -1,14 +1,26 @@
 package cs1302.arcade;
 
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A controller for a 2048 game.
  */
 public class Controller2048 {
 
+    /** Board Model */
     private Model2048 board;
+    /** Score Model */
     private Score score;
+    /** Game View */
     private Arcade2048View view;
+    /** Is Game Over */
     private boolean gameOver;
+    /** Is Valid Move */
     private boolean validMove;
 
     /**
@@ -44,75 +56,90 @@ public class Controller2048 {
                 moveRight();
                 break;
         } // switch
-        // Set random tile
-        if (validMove) {
-            board.setRandomTile();
-            validMove = false;
-            // View must check if game is over after the move has been executed
-            if (checkGameOver()) {
-                gameOver = true;
-            } // if
-        } // if
     } // makeMove()
 
     /**
      * Shifts board tiles in the up direction.
      */
     private void moveUp() {
+        ParallelTransition animations = makeParallelTransition();
         for (int col = 0; col < board.getCols(); col++) {
             Tile[] tiles = new Tile[board.getRows()];
             for (int row = 0; row < board.getRows(); row++) {
                 tiles[row] = board.getTile(row, col);
             } // for
-            shiftTiles(tiles);
+            shiftTiles(tiles, animations);
         } // for
+        if (validMove) {
+            animations.play();
+        } else {
+            view.setKeyDisable(false);
+        } // if
     } // moveUp()
 
     /**
      * Shifts board tiles in the down direction.
      */
     private void moveDown() {
+        ParallelTransition animations = makeParallelTransition();
         for (int col = 0; col < board.getCols(); col++) {
             Tile[] tiles = new Tile[board.getRows()];
             for (int row = board.getRows() - 1; row >= 0; row--) {
                 tiles[Math.abs(row - 3)] = board.getTile(row, col);
             } // for
-            shiftTiles(tiles);
+            shiftTiles(tiles, animations);
         } // for
+        if (validMove) {
+            animations.play();
+        } else {
+            view.setKeyDisable(false);
+        } // if
     } // moveDown()
 
     /**
      * Shifts board tiles in the left direction.
      */
     private void moveLeft() {
+        ParallelTransition animations = makeParallelTransition();
         for (int row = 0; row < board.getRows(); row++) {
             Tile[] tiles = new Tile[board.getCols()];
             for (int col = 0; col < board.getCols(); col++) {
                 tiles[col] = board.getTile(row, col);
             } // for
-            shiftTiles(tiles);
+            shiftTiles(tiles, animations);
         } // for
+        if (validMove) {
+            animations.play();
+        } else {
+            view.setKeyDisable(false);
+        } // if
     } // moveLeft()
 
     /**
      * Shifts board tiles in the right direction.
      */
     private void moveRight() {
+        ParallelTransition animations = makeParallelTransition();
         for (int row = 0; row < board.getRows(); row++) {
             Tile[] tiles = new Tile[board.getCols()];
             for (int col = board.getCols() - 1; col >= 0; col--) {
                 tiles[Math.abs(col - 3)] = board.getTile(row, col);
             } // for
-            shiftTiles(tiles);
+            shiftTiles(tiles, animations);
         } // for
+        if (validMove) {
+            animations.play();
+        } else {
+            view.setKeyDisable(false);
+        } // if
     } // moveRight()
 
     /**
      * Shift tiles down the array by merging.
-     * 
+     *
      * @param tiles a row or column of tiles being shifted down
      */
-    private void shiftTiles(Tile[] tiles) {
+    private void shiftTiles(Tile[] tiles, ParallelTransition pt) {
         // Pointer to the previous tile that will be checked for merging
         int prev = 0;
         for (int i = 1; i < tiles.length; i++) {
@@ -121,17 +148,25 @@ public class Controller2048 {
                 // If the pointer and current tile are equal then merge and add score
                 // Else if the pointer is zero then merge without adding score
                 // Else move pointer up one and shift down if there is a blank space
-                if (tiles[prev].getValue() == tiles[i].getValue()) {
-                    int score = tiles[prev].mergeTile(tiles[i]);
+                if (tiles[prev].getFutureValue() == tiles[i].getValue()) {
+                    pt.getChildren().add(makeTranslation(tiles[i], tiles[prev]));
+                    tiles[prev].setFutureValue(tiles[prev].getFutureValue()
+                            + tiles[i].getValue());
+                    tiles[i].setFutureValue(0);
                     prev++;
-                    this.score.addScore(score);
+                    this.score.addScore(tiles[prev].getFutureValue()
+                            + tiles[i].getValue());
                     validMove = true;
-                } else if (tiles[prev].getValue() == 0) {
-                    tiles[prev].mergeTile(tiles[i]);
+                } else if (tiles[prev].getFutureValue() == 0) {
+                    pt.getChildren().add(makeTranslation(tiles[i], tiles[prev]));
+                    tiles[prev].setFutureValue(tiles[i].getValue());
+                    tiles[i].setFutureValue(0);
                     validMove = true;
                 } else {
                     if (prev + 1 != i) {
-                        tiles[prev + 1].mergeTile(tiles[i]);
+                        pt.getChildren().add(makeTranslation(tiles[i], tiles[prev + 1]));
+                        tiles[prev + 1].setFutureValue(tiles[i].getValue());
+                        tiles[i].setFutureValue(0);
                         validMove = true;
                     }
                     prev++;
@@ -139,6 +174,53 @@ public class Controller2048 {
             } // if
         } // for
     } // shiftArr(Tile[])
+
+    /**
+     * Sets a new random tile on the board, then checks if the game is over.
+     */
+    private void onFinishAnimation() {
+        board.setRandomTile();
+        validMove = false;
+        // View must check if game is over after the move has been executed
+        if(checkGameOver()) {
+            gameOver = true;
+        } // if
+        view.setKeyDisable(false);
+    } // onFinishMove()
+
+    /**
+     * Returns a parallel transition of all pieces to be moved on a player
+     * move.
+     *
+     * @return a parallel transition
+     */
+    private ParallelTransition makeParallelTransition() {
+        ParallelTransition pt = new ParallelTransition();
+        pt.setOnFinished( event -> onFinishAnimation() );
+        return pt;
+    } // makeParallelTransition()
+
+    /**
+     * Returns a translate transition for a tile piece.
+     *
+     * @param tile the tile to translate
+     * @param toTile the tile to move and merge to
+     * @return a tile piece translation
+     */
+    private TranslateTransition makeTranslation(Tile tile, Tile toTile) {
+        TranslateTransition tt = new TranslateTransition(Duration.millis(100), tile);
+        double initialX = tile.getTranslateX();
+        double initialY = tile.getTranslateY();
+        tt.setByX(toTile.getTranslateX() - initialX);
+        tt.setByY(toTile.getTranslateY() - initialY);
+        tile.toFront();
+        tt.setOnFinished( event -> {
+            toTile.mergeTile(tile);
+            tile.setTranslateX(initialX);
+            tile.setTranslateY(initialY);
+        });
+        return tt;
+    } // makeTranslation()
 
     /**
      * Returns true if the game is over. The view should call on this after a move
@@ -159,11 +241,12 @@ public class Controller2048 {
         if (board.isFull()) {
             for (int row = 0; row < board.getRows(); row++) {
                 for (int col = 0; col < board.getCols(); col++) {
-                    if (!board.checkNeighborsMatch(row, col)) {
-                        return true;
+                    if (board.checkNeighborsMatch(row, col)) {
+                        return false;
                     } // if
                 } // for
             } // for
+            return true;
         } // if
         return false;
     } // checkGameOver()
