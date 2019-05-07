@@ -129,21 +129,16 @@ public class ControllerTetris{
         switch(points){
             case 1200:
                 return 4;
-            }// case 1200
-            case 40: {
+            case 40:
                 return 1;
-            }// case 40
-            case 140: {}
-            case 300: {
+            case 140:
+            case 300:
                 return 3;
-            }// case 300/140
-            case 100: {}
-            case 80: {
+            case 100:
+            case 80:
                 return 2;
-            }// case 80/100
-            default:{
+            default:
                 return 0;
-            }//default
         }// switch
     }//calcCleared
 
