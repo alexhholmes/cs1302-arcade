@@ -23,21 +23,35 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Arcade2048View {
 
+    /** Application */
     private ArcadeApp app;
+    /** Main Pane */
     private GridPane root;
+    /** 2048 Label */
     private Label gameLabel;
+    /** Score Box */
     private VBox scoreVBox;
+    /** Button Box */
     private HBox buttonBox;
+    /** Board Background */
     private StackPane boardBackground;
+    /** Game Board */
     private Group board;
+    /** Help Text */
     private Text text;
+    /** Game Over Pane */
     private StackPane gameOverPane;
+    /** Game Over Text */
     private Text gameOverText;
 
+    /** Game Score Model */
     private Score score;
+    /** Game Board Model */
     private Model2048 boardModel;
+    /** Game Controller */
     private Controller2048 controller;
 
+    /** Key Input Disable */
     private AtomicBoolean keyDisable = new AtomicBoolean(false);
     
     /**
@@ -49,7 +63,6 @@ public class Arcade2048View {
         score = new Score();
         boardModel = new Model2048();
         controller = new Controller2048(boardModel, score, this);
-        
         // Build UI
         buildView();
     } // Arcade2048View(ArcadeApp)

@@ -12,10 +12,15 @@ import java.util.List;
  */
 public class Controller2048 {
 
+    /** Board Model */
     private Model2048 board;
+    /** Score Model */
     private Score score;
+    /** Game View */
     private Arcade2048View view;
+    /** Is Game Over */
     private boolean gameOver;
+    /** Is Valid Move */
     private boolean validMove;
 
     /**
@@ -183,12 +188,25 @@ public class Controller2048 {
         view.setKeyDisable(false);
     } // onFinishMove()
 
+    /**
+     * Returns a parallel transition of all pieces to be moved on a player
+     * move.
+     *
+     * @return a parallel transition
+     */
     private ParallelTransition makeParallelTransition() {
         ParallelTransition pt = new ParallelTransition();
         pt.setOnFinished( event -> onFinishAnimation() );
         return pt;
     } // makeParallelTransition()
 
+    /**
+     * Returns a translate transition for a tile piece.
+     *
+     * @param tile the tile to translate
+     * @param toTile the tile to move and merge to
+     * @return a tile piece translation
+     */
     private TranslateTransition makeTranslation(Tile tile, Tile toTile) {
         TranslateTransition tt = new TranslateTransition(Duration.millis(100), tile);
         double initialX = tile.getTranslateX();

@@ -19,7 +19,9 @@ import javafx.event.ActionEvent;
  */
 public class ArcadeApp extends Application {
 
+    /** The Stage */
     Stage stage;
+    /** Game Select Scene */
     Scene gameSelectScene;
 
     /**
