@@ -51,8 +51,8 @@ public class ArcadeApp extends Application {
      */
     private void buildSelectGameScene() {
         // Image views
-        Image imageTetris = new Image("https://mobimg.b-cdn.net/androidgame_img/tetris/thumbs/tetris.jpg", 100, 100, true, true); // TODO
-        Image image2048 = new Image("https://i2.wp.com/healthybrains.org/wp-content/uploads/2018/07/wsi-imageoptim-2048game.png?fit=475%2C300&ssl=1", 100, 100, true, true); // TODO
+        Image imageTetris = new Image("Tetris.png", 100, 100, true, true);
+        Image image2048 = new Image("2048.png", 100, 100, true, true);
         ImageView imageViewTetris = new ImageView(imageTetris);
         ImageView imageView2048 = new ImageView(image2048);
         // Buttons
