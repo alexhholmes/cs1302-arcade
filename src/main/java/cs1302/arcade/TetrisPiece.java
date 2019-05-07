@@ -152,6 +152,15 @@ public class TetrisPiece{
         }// for
     }// drop
     
+    /**
+    raises a block's row by 1
+    */
+    public void unDrop(){
+        for(int i = 0; i<4; i++){
+            this.getBlock(i).setRow(this.getBlock(i).getRow()+1);
+        }// for
+    }// unDrop
+    
     /** 
     * moves piece one column to the right
     */

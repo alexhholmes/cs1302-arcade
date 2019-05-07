@@ -176,7 +176,7 @@ public class TetrisBoard {
     * @param piece to be removed
     */
     public void removePiece(TetrisPiece piece){
-        for(int i = 0; i < 4; i++){
+        for(int i = 1; i < 4; i++){
             int tempX = piece.getBlock(i).getColumn();
             int tempY = piece.getBlock(i).getRow();
             board[tempX][tempY] = Color.BLACK;
@@ -188,27 +188,27 @@ public class TetrisBoard {
     * and the piece is not at the bottum of the board
     */
     public boolean canDrop(TetrisPiece piece){
+        this.removePiece(piece);
+        piece.drop();
         for(int i = 1; i<=4; i++){
             int tempX = piece.getBlock(i).getColumn();
             int tempY = piece.getBlock(i).getRow();
-            boolean samePiece = false;
-            for(int z = 1; z <= 4; z++){
-                int tempX2 = piece.getBlock(z).getColumn();
-                int tempY2 = piece.getBlock(z).getRow();
-                    if(tempX-1 == tempX2 && tempY-1 == tempY2){
-                        samePiece = true;
-                    }// if
-            }// for
-            if(!samePiece){
-                if(board[tempX-1][tempY-1] != Color.BLACK){
+            if(this.isInBounds(tempX, tempY)){
+                if(board[tempX][tempY] != Color.BLACK){
+                    piece.unDrop();
+                    this.addPiece(piece);
                     return false;
                 }// if
             }// if
-            if(tempY >= 19){
+            else{
+                piece.unDrop();
+                this.addPiece(piece);
                 return false;
-            }// if
+            }//else
         }// for
-        return true;
+        piece.unDrop();
+        this.addPiece(piece);
+        return true; 
     }// canDrop
     
     /** lowers a piece by 1 row

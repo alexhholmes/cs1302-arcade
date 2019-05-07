@@ -104,9 +104,11 @@ public class ArcadeApp extends Application {
      */
     private void startTetrisEvent(Button button) {
         EventHandler<ActionEvent> handler = event -> {
-            // ArcadeTetrisView view = new ArcadeTetrisView(this);
-            // stage.setScene(new Scene(view.asParent()));
-            // stage.sizeToScene();
+            ArcadeTetrisView view = new ArcadeTetrisView(this);
+            Scene scene = new Scene(view.asParent());
+            stage.setScene(scene);
+            stage.sizeToScene();
+            view.setControls();
         };
         button.setOnAction(handler);
     } // startTetrisEvent(Button)
