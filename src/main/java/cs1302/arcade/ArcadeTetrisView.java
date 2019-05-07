@@ -17,24 +17,28 @@ import javafx.scene.control.Button;
 import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
-import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.geometry.Insets;
 
 /** 
 * controls what the user sees while playing tetris
 */
 public class ArcadeTetrisView {
-    
+    /** game app */
     private ArcadeApp app;
+    /** score, level, and help display */
     private Label score, level, help;
+    /** the primary display unit */
     private HBox mainPane;
+    /** secondary displays */
     private VBox gameSide, statSide;
+    /** the board for the game and next piece display */
     private GridPane gamePane, nextPane;
+    /** quit and restart buttons */
     private Button quit, restart; 
+    /** pop-up for losing */
     private Alert warning = new Alert(AlertType.ERROR);
-    private Group board;
+    /** execute the game flow */
     ControllerTetris game;
-    
-    private AtomicBoolean keyDisable = new AtomicBoolean(false);
 
     /**
      * Constructs a new Tetris game.
@@ -45,6 +49,9 @@ public class ArcadeTetrisView {
         this.app = app;
         mainPane = new HBox(); 
         buildMainPane();
+        mainPane.setPadding(new Insets(10));
+        mainPane.setSpacing(10);
+        mainPane.setStyle("-fx-background-color: blueviolet");
         game = new ControllerTetris(this);
         
     } // ArcadeTetrisView(ArcadeApp)
@@ -54,21 +61,28 @@ public class ArcadeTetrisView {
      * game view.
      */
     private void buildMainPane() {
-        board = new Group();
         score = new Label("Score: 0");
         level = new Label("Level: 1");
-        String tempHelp = "Use the left, right,\nand down keys to move the tetriminos.\n";
-        String tempHelp2 = "Use the up key to rotate the tetriminos.";
+        String tempHelp = "Use the left, right,\nand down keys to\nmove the tetriminos.\n";
+        String tempHelp2 = "Use the up key to\nrotate the tetriminos.";
+        String tempHelp3 = "Every ten rows you clear,\n the level and\nfallspeed increase!";
         help = new Label("How to play: \n" + tempHelp + tempHelp2);
         nextPane = new GridPane();
         nextPane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
         gamePane = new GridPane();
         gamePane.setStyle("-fx-grid-lines-visible: true; -fx-grid-lines-color: white");
-        restart = new Button("Restart");
-        quit = new Button("Quit");
+        restart = new Button("Restart"){
+            public void requestFocus() {}
+        };
+        quit = new Button("Quit"){
+            public void requestFocus() {}
+        };
         quitGame(quit);
+        resetGame(restart);
         gameSide = new VBox(gamePane);
+        gameSide.setStyle("-fx-background-color: purple");
         statSide = new VBox(score, level, nextPane, restart, quit, help);
+        statSide.setStyle("-fx-background-color: purple");
         
         mainPane.getChildren()
             .addAll(gameSide, statSide);
@@ -91,18 +105,16 @@ public class ArcadeTetrisView {
     * @param board the board object to be displayed
     */
     public void buildBoard(TetrisBoard board){
+        gamePane.getChildren().clear(); 
         for(int x = 0; x<10; x++){
             for(int y = 0; y< 20; y++){
                 Rectangle tempRec = new Rectangle(25.0, 25.0, board.getValue(x,y));
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
-                Platform.runLater(() -> {
                     gamePane.add(tempRec, tempX, tempY);
-                });// runLater
             }// for
         }// for
     }// buildBoard
-    
     
     /** 
     * boots user to game select when clicking quit button
@@ -121,7 +133,7 @@ public class ArcadeTetrisView {
     */
     private void resetGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
-            game = new ControllerTetris(this);
+            game.reset();
         };
         button.setOnAction(handler);
     }// resetGame
@@ -131,14 +143,13 @@ public class ArcadeTetrisView {
     * @param piece the piece being displayed
     */
     public void buildNext(TetrisPiece piece){
+        nextPane.getChildren().clear(); 
         for(int x = 0; x < 4; x++){
             for(int y = 0; y < 4; y++){
                 Rectangle tempRec = new Rectangle(25.0, 25.0, Color.BLACK);
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
-                Platform.runLater(() -> {
                     nextPane.add(tempRec, tempX, tempY);
-                });// runLater
             }// for
         }// for
         for(int i = 1; i<=4; i++){
@@ -197,9 +208,6 @@ public class ArcadeTetrisView {
      */
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
-            System.out.println(event);
-            if (!keyDisable.get()) {
-                keyDisable.set(true);
                 switch (event.getCode()) {
                     case UP:
                         game.rotate();
@@ -214,8 +222,7 @@ public class ArcadeTetrisView {
                         game.moveRight();
                         break;
                 } // switch
-            }// if
-            board.requestFocus();
+            gamePane.requestFocus();
         };
     } // createKeyHandler()
     
@@ -224,8 +231,8 @@ public class ArcadeTetrisView {
     * the game has been initialized
     */
     public void setControls(){
-        board.setOnKeyPressed(createKeyHandler());
-        board.requestFocus();
+        gamePane.setOnKeyPressed(createKeyHandler());
+        gamePane.requestFocus();
     }// setControls
 
 } // ArcadeTetrisView

@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 * its methods
 */
 public class TetrisBoard {
+
+    /** 2D array the holds the game's storage */
     Color[][] board = new Color[10][20];
     
     /** 
@@ -55,28 +57,35 @@ public class TetrisBoard {
     * @param piece the piece in question
     * @return true if the piece has nothing in its way
     */
-    public boolean canShiftLeft(TetrisPiece piece){
-        TetrisPiece temp = piece; 
-        temp.shiftLeft();
+    public boolean canShiftLeft(TetrisPiece piece){ 
         this.removePiece(piece);
+        piece.shiftLeft();
         for(int i = 1; i<=4; i++){
-            int tempX = temp.getBlock(i).getColumn();
-            int tempY = temp.getBlock(i).getRow();
+            int tempX = piece.getBlock(i).getColumn();
+            int tempY = piece.getBlock(i).getRow();
             if(this.isInBounds(tempX, tempY)){
                 if(board[tempX][tempY] != Color.BLACK){
+                    piece.shiftRight();
                     this.addPiece(piece);
                     return false;
                 }// if
             }// if
             else{
+                piece.shiftRight();
                 this.addPiece(piece);
                 return false;
             }//else
         }// for
+        piece.shiftRight();
         this.addPiece(piece);
         return true; 
     }// canShiftLeft
     
+    /** 
+    * checks to see if a given piece can be added to the board
+    * @param piece the piece in question
+    * @return boolean true if the piece can be added
+    */
     public boolean canAddToTop(TetrisPiece piece){
         for(int i=1; i<=4; i++){
             int tempX = piece.getBlock(i).getColumn();
@@ -88,7 +97,9 @@ public class TetrisBoard {
         return true;
     }//canAddToTop
     
-    /** moves a piece one space to the left on the board
+    /** 
+    * moves a piece one space to the left on the board
+    * @param the piece in question
     */
     public void shiftPieceLeft(TetrisPiece piece){
         if(this.canShiftLeft(piece)){
@@ -103,28 +114,31 @@ public class TetrisBoard {
     * @return true if the piece has nothing in its way
     */
     public boolean canShiftRight(TetrisPiece piece){
-        TetrisPiece temp = piece; 
-        temp.shiftRight();
         this.removePiece(piece);
+        piece.shiftRight();
         for(int i = 1; i<=4; i++){
-            int tempX = temp.getBlock(i).getColumn();
-            int tempY = temp.getBlock(i).getRow();
+            int tempX = piece.getBlock(i).getColumn();
+            int tempY = piece.getBlock(i).getRow();
             if(this.isInBounds(tempX, tempY)){
                 if(board[tempX][tempY] != Color.BLACK){
+                    piece.shiftLeft();
                     this.addPiece(piece);
                     return false;
                 }// if
             }// if
             else{
+                piece.shiftLeft();
                 this.addPiece(piece);
                 return false;
             }//else
         }// for
+        piece.shiftLeft();
         this.addPiece(piece);
         return true; 
     }// canShiftRight
     
     /** moves a piece one space to the right on the board
+    * @param the piece in question
     */
     public void shiftPieceRight(TetrisPiece piece){
         if(this.canShiftRight(piece)){
@@ -136,33 +150,34 @@ public class TetrisBoard {
     
     /**
     * clears a desired row of blocks
-    * @param y desired row
+    * @param rowCleared desired row
     */
-    public void rowClear(int rowCleared, int rowsCleared){
-        for(int y = 0; y < rowsCleared; y++){
-            for(int x = 0; x < 10; x++){
-                board[x][rowCleared - y] = Color.BLACK;
-            }// for
+    public void rowClear(int rowCleared){
+        for(int x = 0; x < 10; x++){
+            board[x][rowCleared] = Color.BLACK;
         }// for
     }// rowclear
     
-    /** shifts the blocks down based on the rows that
+    /** 
+    * shifts the blocks down based on the rows that
     * have been cleared
     * @param rowCleared the lowest row that was just cleared
-    * @param rowsCleared the number of rows cleared
     */
-    public void shiftDown(int rowCleared, int rowsCleared){
-        this.rowClear(rowCleared, rowsCleared);
-        for(int i = 0; i < 10; i++){
-            board[i][rowCleared] = board[i][rowCleared - rowsCleared];
+    public void shiftDown(int rowCleared){
+        this.rowClear(rowCleared);
+        for(int y = rowCleared; y >0; y--){
+            for(int i = 0; i < 10; i++){
+                board[i][y] = board[i][y-1];
+            }// for
         }// for
     }// shiftDown
     
-    /** adds a piece to the top of the board
+    /** 
+    * adds a piece to the top of the board
     * @param piece the TetrisPiece to be added
     */
     public void addPiece(TetrisPiece piece){
-        for(int i = 0; i < 4; i++){
+        for(int i = 1; i <= 4; i++){
             int tempX = piece.getBlock(i).getColumn();
             int tempY = piece.getBlock(i).getRow();
             Color tempColor = piece.getBlock(i).getColor();
@@ -172,18 +187,21 @@ public class TetrisBoard {
         }// for
     }// addPiece
     
-    /** removes a desired piece from the board
+    /** 
+    * removes a desired piece from the board
     * @param piece to be removed
     */
     public void removePiece(TetrisPiece piece){
-        for(int i = 1; i < 4; i++){
+        for(int i = 1; i <=4; i++){
             int tempX = piece.getBlock(i).getColumn();
             int tempY = piece.getBlock(i).getRow();
             board[tempX][tempY] = Color.BLACK;
         }// for
     }// removePiece
     
-    /** sees if a piece can fall 1 row
+    /** 
+    * sees if a piece can fall 1 row
+    * @param the piece in question
     * @return true if there are no blocks directly below the piece
     * and the piece is not at the bottum of the board
     */
@@ -212,6 +230,7 @@ public class TetrisBoard {
     }// canDrop
     
     /** lowers a piece by 1 row
+    * @param the piece in question
     */
     public void dropPiece(TetrisPiece piece){
         if(this.canDrop(piece)){
@@ -242,22 +261,43 @@ public class TetrisBoard {
     */
     public boolean[] rowsCleared(){
         boolean[] cleared = new boolean[4];
+        boolean hasFound = false;
+        for(int i = 0; i < 4; i++){
+            cleared[i] = false;
+        }// for
         int clearCount = 0;
         for(int i = 0; i<20; i++){
-            if(isRowClear(i)){
-                cleared[clearCount] = true;
-                clearCount++;
-                this.shiftDown(i, 1);
+            if(hasFound){
+                if(isRowClear(i)){
+                    cleared[clearCount] = true;
+                    clearCount++;
+                    this.shiftDown(i);
+                }// if
+                else{
+                    clearCount++;
+                }// else
             }// if
+            else{
+                if(isRowClear(i)){
+                    cleared[clearCount] = true;
+                    clearCount++;
+                    this.shiftDown(i);
+                    hasFound = true;
+                }// if
+            }// else
         }// for
         return cleared;
     }// rowsCleared
     
+    /** 
+    * determines the score earned 
+    * @return the amount of points earned
+    */ 
     public int calcScore(){
         boolean[] cleared = this.rowsCleared();
         int numCleared = 0;
         for(int i = 0; i<4; i++){
-            if(cleared[i] = true){
+            if(cleared[i]){
                 numCleared++;
             }// if
         }// for
@@ -303,24 +343,37 @@ public class TetrisBoard {
         return true;
     }// isInBounds
     
+    /** 
+    * determines if a piece can rotate 
+    * @param piece the piece in question
+    * @return true if the piece has room to rotate
+    */
     public boolean canRotate(TetrisPiece piece){
-        TetrisPiece temp = piece; 
-        temp.rotate();
         this.removePiece(piece);
+        piece.rotate();
         for(int i = 1; i<=4; i++){
-            int tempX = temp.getBlock(i).getColumn();
-            int tempY = temp.getBlock(i).getRow();
+            int tempX = piece.getBlock(i).getColumn();
+            int tempY = piece.getBlock(i).getRow();
             if(this.isInBounds(tempX, tempY)){
                 if(board[tempX][tempY] != Color.BLACK){
+                    piece.rotate();
+                    piece.rotate();
+                    piece.rotate();
                     this.addPiece(piece);
                     return false;
                 }// if
             }// if
             else{
+                piece.rotate();
+                piece.rotate();
+                piece.rotate();
                 this.addPiece(piece);
                 return false;
             }//else
         }// for
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
         this.addPiece(piece);
         return true; 
     }// canRotate

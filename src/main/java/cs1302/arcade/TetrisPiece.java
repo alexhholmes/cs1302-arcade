@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 * class for the tetris pieces
 */
 public class TetrisPiece{
+    /** the individual block objects for a piece */
     public TetrisBlock block1, block2, block3, block4;
 
     /** 
@@ -52,70 +53,70 @@ public class TetrisPiece{
     * creates the long piece
     */
     public void makeLong(){
-        block1 = new TetrisBlock(6, 0, Color.LIGHTSKYBLUE);
-        block2 = new TetrisBlock(6, 1, Color.LIGHTSKYBLUE);
-        block3 = new TetrisBlock(6, 2, Color.LIGHTSKYBLUE);
-        block4 = new TetrisBlock(6, 3, Color.LIGHTSKYBLUE);
+        block1 = new TetrisBlock(5, 0, Color.LIGHTSKYBLUE);
+        block2 = new TetrisBlock(5, 1, Color.LIGHTSKYBLUE);
+        block3 = new TetrisBlock(5, 2, Color.LIGHTSKYBLUE);
+        block4 = new TetrisBlock(5, 3, Color.LIGHTSKYBLUE);
     }// makeLong
     
     /** 
     * creates the square piece
     */
     public void makeSquare(){
-        block1 = new TetrisBlock(5, 0, Color.YELLOW);
-        block2 = new TetrisBlock(6, 0, Color.YELLOW);
-        block3 = new TetrisBlock(5, 1, Color.YELLOW);
-        block4 = new TetrisBlock(6, 1, Color.YELLOW);
+        block1 = new TetrisBlock(4, 0, Color.YELLOW);
+        block2 = new TetrisBlock(5, 0, Color.YELLOW);
+        block3 = new TetrisBlock(4, 1, Color.YELLOW);
+        block4 = new TetrisBlock(5, 1, Color.YELLOW);
     }// makeSquare
     
     /** 
     * creates the right L piece
     */
     public void makeRightL(){
-        block1 = new TetrisBlock(5, 0, Color.ORANGE);
-        block2 = new TetrisBlock(5, 1, Color.ORANGE);
-        block3 = new TetrisBlock(5, 2, Color.ORANGE);
-        block4 = new TetrisBlock(6, 2, Color.ORANGE);
+        block1 = new TetrisBlock(4, 0, Color.ORANGE);
+        block2 = new TetrisBlock(4, 1, Color.ORANGE);
+        block3 = new TetrisBlock(4, 2, Color.ORANGE);
+        block4 = new TetrisBlock(5, 2, Color.ORANGE);
     }// makeRightL
     
     /** 
     * creates the left L piece
     */
     public void makeLeftL(){
-        block1 = new TetrisBlock(6, 0, Color.DARKBLUE);
-        block2 = new TetrisBlock(6, 1, Color.DARKBLUE);
-        block3 = new TetrisBlock(6, 2, Color.DARKBLUE);
-        block4 = new TetrisBlock(5, 2, Color.DARKBLUE);
+        block1 = new TetrisBlock(5, 0, Color.DARKBLUE);
+        block2 = new TetrisBlock(5, 1, Color.DARKBLUE);
+        block3 = new TetrisBlock(5, 2, Color.DARKBLUE);
+        block4 = new TetrisBlock(4, 2, Color.DARKBLUE);
     }// makeLeftL
     
     /** 
     * creates the right Z piece
     */
     public void makeRightZ(){
-        block1 = new TetrisBlock(7, 0, Color.GREEN);
-        block2 = new TetrisBlock(6, 0, Color.GREEN);
-        block3 = new TetrisBlock(6, 1, Color.GREEN);
-        block4 = new TetrisBlock(5, 1, Color.GREEN);
+        block1 = new TetrisBlock(6, 0, Color.GREEN);
+        block2 = new TetrisBlock(5, 0, Color.GREEN);
+        block3 = new TetrisBlock(5, 1, Color.GREEN);
+        block4 = new TetrisBlock(4, 1, Color.GREEN);
     }// makeRightZ
     
     /** 
     * creates the left Z piece
     */
     public void makeLeftZ(){
-        block1 = new TetrisBlock(5, 0, Color.RED);
-        block2 = new TetrisBlock(6, 0, Color.RED);
-        block3 = new TetrisBlock(6, 1, Color.RED);
-        block4 = new TetrisBlock(7, 1, Color.RED);
+        block1 = new TetrisBlock(4, 0, Color.RED);
+        block2 = new TetrisBlock(5, 0, Color.RED);
+        block3 = new TetrisBlock(5, 1, Color.RED);
+        block4 = new TetrisBlock(6, 1, Color.RED);
     }// makeLeftZ
     
     /** 
     * creates the T piece
     */
     public void makeT(){
-        block1 = new TetrisBlock(6, 0, Color.PURPLE);
-        block2 = new TetrisBlock(5, 1, Color.PURPLE);
-        block3 = new TetrisBlock(6, 1, Color.PURPLE);
-        block4 = new TetrisBlock(7, 1, Color.PURPLE);
+        block1 = new TetrisBlock(5, 0, Color.PURPLE);
+        block2 = new TetrisBlock(4, 1, Color.PURPLE);
+        block3 = new TetrisBlock(5, 1, Color.PURPLE);
+        block4 = new TetrisBlock(6, 1, Color.PURPLE);
     }// makeTPiece
     
     /** 
@@ -147,8 +148,8 @@ public class TetrisPiece{
    * lowers a block's row by 1
    */ 
     public void drop(){
-        for(int i = 0; i<4; i++){
-            this.getBlock(i).setRow(this.getBlock(i).getRow()-1);
+        for(int i = 1; i<=4; i++){
+            this.getBlock(i).setRow(this.getBlock(i).getRow()+1);
         }// for
     }// drop
     
@@ -156,8 +157,8 @@ public class TetrisPiece{
     raises a block's row by 1
     */
     public void unDrop(){
-        for(int i = 0; i<4; i++){
-            this.getBlock(i).setRow(this.getBlock(i).getRow()+1);
+        for(int i = 1; i<=4; i++){
+            this.getBlock(i).setRow(this.getBlock(i).getRow()-1);
         }// for
     }// unDrop
     
@@ -165,22 +166,38 @@ public class TetrisPiece{
     * moves piece one column to the right
     */
     public void shiftRight(){
-        for(int i = 0; i<4; i++){
-            if(this.getBlock(i).getColumn() < 19){
-                this.getBlock(i).setColumn(this.getBlock(i).getColumn()+1);
+        boolean canShift = true;
+        for(int i = 1; i<=4; i++){
+            if(this.getBlock(i).getColumn() >=9){
+                canShift = false;
             }// if
         }// for
+    
+        if(canShift){
+            for(int i = 1; i<=4; i++){
+                if(this.getBlock(i).getColumn() < 9){
+                    this.getBlock(i).setColumn(this.getBlock(i).getColumn()+1);
+                }// if
+            }// for
+        }// if
     }// shiftRight
     
     /** 
     * moves piece one column to the left
     */
     public void shiftLeft(){
-        for(int i = 0; i<4; i++){
-            if(this.getBlock(i).getColumn() > 0){
-                this.getBlock(i).setColumn(this.getBlock(i).getColumn()-1);
+        boolean canShift = true;
+        for(int i = 1; i<=4; i++){
+            if(this.getBlock(i).getColumn() <= 0){
+                canShift = false;
             }// if
         }// for
+    
+        if(canShift){
+            for(int i = 1; i<=4; i++){
+                    this.getBlock(i).setColumn(this.getBlock(i).getColumn()-1);
+            }// for
+        }// if
     }// shiftLeft
     
     /** 

@@ -6,9 +6,12 @@ import javafx.scene.paint.Color;
 * class for the individual tetris blocks
 */
 public class TetrisBlock {
-
+    
+    /** the column of the block */
     public int xValue;
+    /** the row of the block */
     public int yValue;
+    /** the color of the block */
     public Color color;
     
     /**

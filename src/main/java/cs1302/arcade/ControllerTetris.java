@@ -14,13 +14,23 @@ import javafx.event.EventHandler;
 */
 public class ControllerTetris{
     
+    /** the game display controller */ 
     ArcadeTetrisView gameView;
+    /** the timeline to run the periodic dropping */
+    Timeline tLine;
+    /** the current level */
     TetrisLevel level;
+    /** the player's score */
     Score score;
+    /** the internal storage for the board */
     TetrisBoard gameBoard;
+    /** the piece in play and the next piece in play */
     TetrisPiece currentPiece, nextPiece;
+    /** controls when the piece should be falling */
     boolean falling;
+    /** total number of rows cleared */
     int rowsCleared = 0;
+    /** used to generate a new piece */
     Random random = new Random();
     
     /** 
@@ -32,38 +42,41 @@ public class ControllerTetris{
         this.setUp();
         
         this.makeTimeLine(level.getLevel());
-        
-            if(gameBoard.canDrop(currentPiece) == false){
-                score.addScore(gameBoard.calcScore());
-                gameView.updateScore(score.getScore());
-                rowsCleared += this.calcCleared(gameBoard.calcScore());
-                currentPiece = nextPiece;
-                nextPiece = new TetrisPiece(random.nextInt(7)+1);
-                this.levelCheck();
-                if(gameBoard.canAddToTop(currentPiece)){
-                    gameBoard.addPiece(currentPiece);
-                    gameView.buildBoard(gameBoard);
-                    gameView.buildNext(nextPiece);
-                }// if
-                else{
-                    falling = false;
-                    gameBoard.addPiece(currentPiece);
-                    gameView.buildBoard(gameBoard);
-                    gameView.lose(score);
-                }// else
-            }// if
+    
     }// ControllerTetris
+    
     
     /**
     * sets up tetris block falling periodically
     * @param time used to calculate how much time there is between drops
     */
     private void makeTimeLine(double time){
-        Timeline tLine = new Timeline();
+        tLine = new Timeline();
         EventHandler<ActionEvent> handler = event ->{
             if(falling){
                 gameBoard.dropPiece(currentPiece);
                 gameView.buildBoard(gameBoard);
+                
+                if(gameBoard.canDrop(currentPiece) == false){
+                    int pointsEarned = gameBoard.calcScore();
+                    score.addScore(pointsEarned);
+                    gameView.updateScore(score.getScore());
+                    rowsCleared += this.calcCleared(pointsEarned);
+                    currentPiece = nextPiece;
+                    nextPiece = new TetrisPiece(random.nextInt(7)+1);
+                    this.levelCheck();
+                    if(gameBoard.canAddToTop(currentPiece)){
+                        gameBoard.addPiece(currentPiece);
+                        gameView.buildBoard(gameBoard);
+                        gameView.buildNext(nextPiece);
+                    }// if
+                    else{
+                        falling = false;
+                        gameBoard.addPiece(currentPiece);
+                        gameView.buildBoard(gameBoard);
+                        gameView.lose(score);
+                    }// else
+                }// if
             }// if
         };
         KeyFrame frame = new KeyFrame(Duration.seconds(1.7-(time*.2)), handler);
@@ -73,24 +86,35 @@ public class ControllerTetris{
     }// makeTimeLine
     
     /** 
-    * updates the rate in which the tetris pieces fall
-    * @param newTime the new variable used to determine the rate
-    */
-    private void updateTimeLine(double newTime){
-        this.makeTimeLine(newTime);
-    }//updateTimeLine
-    
-    /** 
     * checks to see if the level needs to increase
     */
     private void levelCheck(){
         if(level.getLevel() < 10){
-            if(rowsCleared/10 > level.getLevel()){
+            if(rowsCleared/10 >= level.getLevel()){
                 level.setLevel(level.getLevel()+1);
                 gameView.updateLevel(level.getLevel());
+                tLine.pause();
+                this.makeTimeLine(level.getLevel());
             }// if
         }// if
     }// levelCheck
+    
+    /** 
+    * resets the game 
+    */
+    public void reset(){
+        score = new Score();
+        level = new TetrisLevel();
+        level.setLevel(1);
+        gameBoard = new TetrisBoard();
+        currentPiece = new TetrisPiece(random.nextInt(7)+1);
+        nextPiece = new TetrisPiece(random.nextInt(7)+1);
+        gameView.buildBoard(gameBoard);
+        gameView.buildNext(nextPiece);
+        gameView.updateScore(score.getScore());
+        gameView.updateLevel(level.getLevel());
+        falling = true;
+    }// reset
     
     /** 
     * calculates the number of rows cleared based off 
@@ -124,13 +148,12 @@ public class ControllerTetris{
     * gets game objects set up 
     */
     private void setUp(){
+        rowsCleared = 0;
         score = new Score();
         level = new TetrisLevel();
         gameBoard = new TetrisBoard();
-        gameView.buildBoard(gameBoard);
         currentPiece = new TetrisPiece(random.nextInt(7)+1);
         nextPiece = new TetrisPiece(random.nextInt(7)+1);
-        gameBoard.addPiece(currentPiece);
         gameView.buildBoard(gameBoard);
         gameView.buildNext(nextPiece);
         falling = true;
