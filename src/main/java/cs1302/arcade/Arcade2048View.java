@@ -53,9 +53,11 @@ public class Arcade2048View {
 
     /** Key Input Disable */
     private AtomicBoolean keyDisable = new AtomicBoolean(false);
-    
+
     /**
      * Starts a new game of 2048.
+     *
+     * @param app the game application
      */
     public Arcade2048View(ArcadeApp app) {
         // Instance variables
@@ -190,9 +192,9 @@ public class Arcade2048View {
      */
     private void buildHelpText() {
         String helpText = "How to Play:\n" +
-                "Use the arrow keys to move the tiles.\n" +
-                "Tiles will merge together if they are equal\nnumbers. " +
-                "Try to get the highest score\nyou can!";
+            "Use the arrow keys to move the tiles.\n" +
+            "Tiles will merge together if they are equal\nnumbers. " +
+            "Try to get the highest score\nyou can!";
         text = new Text(helpText);
     } // buildHelpText()
 

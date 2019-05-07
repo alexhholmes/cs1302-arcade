@@ -20,9 +20,10 @@ import javafx.scene.Group;
 import javafx.geometry.Insets;
 
 /** 
-* controls what the user sees while playing tetris
-*/
+ * Controls what the user sees while playing tetris.
+ */
 public class ArcadeTetrisView {
+
     /** game app */
     private ArcadeApp app;
     /** score, level, and help display */
@@ -53,7 +54,6 @@ public class ArcadeTetrisView {
         mainPane.setSpacing(10);
         mainPane.setStyle("-fx-background-color: blueviolet");
         game = new ControllerTetris(this);
-        
     } // ArcadeTetrisView(ArcadeApp)
 
     /**
@@ -83,27 +83,30 @@ public class ArcadeTetrisView {
         gameSide.setStyle("-fx-background-color: purple");
         statSide = new VBox(score, level, nextPane, restart, quit, help);
         statSide.setStyle("-fx-background-color: purple");
-        
+
         mainPane.getChildren()
             .addAll(gameSide, statSide);
     } // buildMainPane
-    
+
     /** 
-    * displays a pop-up when the player loses
-    * score the score the user earned
-    */
+     * Displays a pop-up when the player loses
+     * score the score the user earned.
+     *
+     * @param score the game score
+     */
     public void lose(Score score){
         warning.setTitle("FOOL!");
         warning.setHeaderText(null);
         warning.setContentText("Game Over! Your score was: " + score.getScore() + 
-        ". To play again, close this and hit reset!");
-         Platform.runLater(() -> {warning.showAndWait();});
+                ". To play again, close this and hit reset!");
+        Platform.runLater(() -> {warning.showAndWait();});
     }// lose
-    
+
     /** 
-    * builds the tetris board
-    * @param board the board object to be displayed
-    */
+     * Builds the tetris board.
+     *
+     * @param board the board object to be displayed
+     */
     public void buildBoard(TetrisBoard board){
         gamePane.getChildren().clear(); 
         for(int x = 0; x<10; x++){
@@ -111,37 +114,40 @@ public class ArcadeTetrisView {
                 Rectangle tempRec = new Rectangle(25.0, 25.0, board.getValue(x,y));
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
-                    gamePane.add(tempRec, tempX, tempY);
+                gamePane.add(tempRec, tempX, tempY);
             }// for
         }// for
     }// buildBoard
-    
+
     /** 
-    * boots user to game select when clicking quit button
-    * @param button the user has to click to get booted to the game select
-    */
+     * Boots user to game select when clicking quit button.
+     * 
+     * @param button the user has to click to get booted to the game select
+     */
     private void quitGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
             app.setSelectGameScene();
         };
         button.setOnAction(handler);
     }// quitGame
-    
+
     /** 
-    * restarts the tetris game
-    * @param button the button that needs to be pressed to restart the game
-    */
+     * Restarts the tetris game
+     *
+     * @param button the button that needs to be pressed to restart the game
+     */
     private void resetGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
             game.reset();
         };
         button.setOnAction(handler);
     }// resetGame
-    
+
     /** 
-    * builds the grid pane to display the next block
-    * @param piece the piece being displayed
-    */
+     * Builds the grid pane to display the next block
+     *
+     * @param piece the piece being displayed
+     */
     public void buildNext(TetrisPiece piece){
         nextPane.getChildren().clear(); 
         for(int x = 0; x < 4; x++){
@@ -149,7 +155,7 @@ public class ArcadeTetrisView {
                 Rectangle tempRec = new Rectangle(25.0, 25.0, Color.BLACK);
                 int tempX = this.getVal(x);
                 int tempY = this.getVal(y);
-                    nextPane.add(tempRec, tempX, tempY);
+                nextPane.add(tempRec, tempX, tempY);
             }// for
         }// for
         for(int i = 1; i<=4; i++){
@@ -157,40 +163,43 @@ public class ArcadeTetrisView {
             int tempY = piece.getBlock(i).getRow();
             Rectangle tempRec = new Rectangle(25.0, 25.0, piece.getBlock(i).getColor());
             Platform.runLater(() -> {
-                    nextPane.add(tempRec, tempX, tempY);
-                });// runLater
+                nextPane.add(tempRec, tempX, tempY);
+            });// runLater
         }// for
     }// buildNext
-    
+
     /**
-    * updates the score display
-    * @param points the new score to display
-    */
+     * Updates the score display.
+     *
+     * @param points the new score to display
+     */
     public void updateScore(int points){
         String scoreText = "Score: " + Integer.toString(points);
         score.setText(scoreText);
     }// updateScore
-    
+
     /**
-    * updates the level display
-    * @param num the new level to display
-    */
+     * Updates the level display.
+     *
+     * @param num the new level to display
+     */
     public void updateLevel(int num){
         String levelText = "Level: " + Integer.toString(num);
         level.setText(levelText);
     }// updateLevel
-    
+
     /** 
-    * helper method for build board that simply returns 
-    * a given value to make java think the int is final
-    * @param i the value to be returned
-    * @return the given value
-    */
+     * Helper method for build board that simply returns 
+     * a given value to make java think the int is final.
+     *
+     * @param i the value to be returned
+     * @return the given value
+     */
     private int getVal(int i){
         int temp = i;
         return temp;
     }// getVal
-    
+
     /**
      * Return the parent node of this view.
      *
@@ -199,7 +208,7 @@ public class ArcadeTetrisView {
     public Parent asParent() {
         return mainPane;
     } // asParent()
-    
+
     /**
      * Return a key event handler that makes a player move that
      * will move the tetrimino.
@@ -208,28 +217,28 @@ public class ArcadeTetrisView {
      */
     private EventHandler<? super KeyEvent> createKeyHandler() {
         return event -> {
-                switch (event.getCode()) {
-                    case UP:
-                        game.rotate();
-                        break;
-                    case DOWN:
-                        game.moveDown();
-                        break;
-                    case LEFT:
-                        game.moveLeft();
-                        break;
-                    case RIGHT:
-                        game.moveRight();
-                        break;
-                } // switch
+            switch (event.getCode()) {
+                case UP:
+                    game.rotate();
+                    break;
+                case DOWN:
+                    game.moveDown();
+                    break;
+                case LEFT:
+                    game.moveLeft();
+                    break;
+                case RIGHT:
+                    game.moveRight();
+                    break;
+            } // switch
             gamePane.requestFocus();
         };
     } // createKeyHandler()
-    
+
     /**
-    * sets the game's controls and focuses after 
-    * the game has been initialized
-    */
+     * Sets the game's controls and focuses after 
+     * the game has been initialized
+     */
     public void setControls(){
         gamePane.setOnKeyPressed(createKeyHandler());
         gamePane.requestFocus();

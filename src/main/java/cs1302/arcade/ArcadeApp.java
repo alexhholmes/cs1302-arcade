@@ -25,7 +25,7 @@ public class ArcadeApp extends Application {
     Scene gameSelectScene;
 
     /**
-     * {@inheritdoc}
+     * Starts the arcade application.
      */
     @Override
     public void start(Stage stage) {

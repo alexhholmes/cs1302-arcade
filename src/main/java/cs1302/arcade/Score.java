@@ -27,7 +27,7 @@ public class Score {
     public ReadOnlyIntegerProperty scoreProperty() {
         return this.score;
     } // scoreProperty()
-    
+
     public int getScore(){
         return this.score.getValue();
     }// getScore

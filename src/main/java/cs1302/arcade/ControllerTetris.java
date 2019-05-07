@@ -10,53 +10,55 @@ import javafx.event.EventHandler;
 
 
 /** 
-* handles all of the surface-level tasks for tetris
-*/
+ * Handles all of the surface-level tasks for tetris.
+ */
 public class ControllerTetris{
-    
-    /** the game display controller */ 
+
+    /** The game display controller */ 
     ArcadeTetrisView gameView;
-    /** the timeline to run the periodic dropping */
+    /** The timeline to run the periodic dropping */
     Timeline tLine;
-    /** the current level */
+    /** The current level */
     TetrisLevel level;
-    /** the player's score */
+    /** The player's score */
     Score score;
-    /** the internal storage for the board */
+    /** The internal storage for the board */
     TetrisBoard gameBoard;
-    /** the piece in play and the next piece in play */
+    /** The piece in play and the next piece in play */
     TetrisPiece currentPiece, nextPiece;
-    /** controls when the piece should be falling */
+    /** Controls when the piece should be falling */
     boolean falling;
-    /** total number of rows cleared */
+    /** Total number of rows cleared */
     int rowsCleared = 0;
-    /** used to generate a new piece */
+    /** Used to generate a new piece */
     Random random = new Random();
-    
+
     /** 
-    * contains the basic setup and gameflow of tetris
-    * @param view the object used to alter's the user's view of the game
-    */
+     * Contains the basic setup and gameflow of tetris.
+     *
+     * @param view the object used to alter's the user's view of the game
+     */
     public ControllerTetris(ArcadeTetrisView view){
         gameView = view;
         this.setUp();
-        
+
         this.makeTimeLine(level.getLevel());
-    
+
     }// ControllerTetris
-    
-    
+
+
     /**
-    * sets up tetris block falling periodically
-    * @param time used to calculate how much time there is between drops
-    */
+     * Sets up tetris block falling periodically.
+     *
+     * @param time used to calculate how much time there is between drops
+     */
     private void makeTimeLine(double time){
         tLine = new Timeline();
         EventHandler<ActionEvent> handler = event ->{
             if(falling){
                 gameBoard.dropPiece(currentPiece);
                 gameView.buildBoard(gameBoard);
-                
+
                 if(gameBoard.canDrop(currentPiece) == false){
                     int pointsEarned = gameBoard.calcScore();
                     score.addScore(pointsEarned);
@@ -84,10 +86,10 @@ public class ControllerTetris{
         tLine.getKeyFrames().add(frame);
         tLine.play();
     }// makeTimeLine
-    
+
     /** 
-    * checks to see if the level needs to increase
-    */
+     * Checks to see if the level needs to increase.
+     */
     private void levelCheck(){
         if(level.getLevel() < 10){
             if(rowsCleared/10 >= level.getLevel()){
@@ -98,10 +100,10 @@ public class ControllerTetris{
             }// if
         }// if
     }// levelCheck
-    
+
     /** 
-    * resets the game 
-    */
+     * Resets the game.
+     */
     public void reset(){
         score = new Score();
         level = new TetrisLevel();
@@ -115,16 +117,17 @@ public class ControllerTetris{
         gameView.updateLevel(level.getLevel());
         falling = true;
     }// reset
-    
+
     /** 
-    * calculates the number of rows cleared based off 
-    * the score earned 
-    * @param points the score in question
-    * @return the number of rows cleared based on the points
-    */
+     * Calculates the number of rows cleared based off 
+     * the score earned.
+     *
+     * @param points the score in question
+     * @return the number of rows cleared based on the points
+     */
     private int calcCleared(int points){
         switch(points){
-            case 1200: {
+            case 1200:
                 return 4;
             }// case 1200
             case 40: {
@@ -143,10 +146,10 @@ public class ControllerTetris{
             }//default
         }// switch
     }//calcCleared
-    
+
     /** 
-    * gets game objects set up 
-    */
+     * Gets game objects set up.
+     */
     private void setUp(){
         rowsCleared = 0;
         score = new Score();
@@ -158,36 +161,37 @@ public class ControllerTetris{
         gameView.buildNext(nextPiece);
         falling = true;
     }// setUp
-    
+
     /**
-    * moves current piece to the left
-    */
+     * Moves current piece to the left.
+     */
     public void moveLeft(){
         gameBoard.shiftPieceLeft(currentPiece);
         gameView.buildBoard(gameBoard);
     }// moveLeft
-    
+
     /**
-    * moves current piece to the right
-    */
+     * Moves current piece to the right.
+     */
     public void moveRight(){
         gameBoard.shiftPieceRight(currentPiece);
         gameView.buildBoard(gameBoard);
     }// moveLeft
-    
+
     /** 
-    * moves the current piece down
-    */
+     * Moves the current piece down.
+     */
     public void moveDown(){
         gameBoard.dropPiece(currentPiece);
         gameView.buildBoard(gameBoard);
     }// moveDown
-    
+
     /**
-    * rotates the current piece
-    */
+     * Rotates the current piece
+     */
     public void rotate(){
         gameBoard.rotatePiece(currentPiece);
         gameView.buildBoard(gameBoard);
     }// rotate
+
 }// ControllerTetris

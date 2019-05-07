@@ -25,6 +25,10 @@ public class Controller2048 {
 
     /**
      * Starts a new game of 2048.
+     * 
+     * @param board the board model
+     * @param score the score model
+     * @param view the game view
      */
     public Controller2048(Model2048 board, Score score, Arcade2048View view) {
         this.board = board;

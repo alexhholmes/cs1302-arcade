@@ -42,6 +42,8 @@ public class Tile extends StackPane {
 
     /**
      * Constructs a new tile with the specified value.
+     *
+     * @param value the value of this tile
      */
     public Tile(int value) {
         this();
