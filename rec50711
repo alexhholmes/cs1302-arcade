@@ -1,0 +1,91 @@
+cs1302-arcade:
+total 96
+-rw-r--r-- 1 ugrad   225 May  7 04:38 ATTRIBUTION.md
+drwxr-xr-x 3 ugrad  4096 May  7 03:52 doc
+-rw-r--r-- 1 ugrad 19121 May  7 03:57 LICENSE
+-rw-r--r-- 1 ugrad   216 May  5 17:26 Makefile
+-rw-r--r-- 1 ugrad  1942 May  5 17:26 pom.xml
+-rw-r--r-- 1 ugrad 52889 May  5 17:26 README.md
+-rw-r--r-- 1 ugrad     0 May  7 04:39 rec50711
+-rw-r--r-- 1 ugrad  2575 May  7 04:38 REFLECTION.md
+drwxr-xr-x 3 ugrad  4096 May  5 17:26 src
+
+cs1302-arcade/doc:
+total 108
+-rw-r--r-- 1 ugrad  2167 May  7 04:24 allclasses-frame.html
+-rw-r--r-- 1 ugrad  1887 May  7 04:24 allclasses-noframe.html
+-rw-r--r-- 1 ugrad  3561 May  7 04:24 constant-values.html
+drwxr-xr-x 3 ugrad  4096 May  7 03:52 cs1302
+-rw-r--r-- 1 ugrad  3511 May  7 04:24 deprecated-list.html
+-rw-r--r-- 1 ugrad  7946 May  7 04:24 help-doc.html
+-rw-r--r-- 1 ugrad 43186 May  7 04:24 index-all.html
+-rw-r--r-- 1 ugrad  2786 May  7 04:24 index.html
+-rw-r--r-- 1 ugrad  6624 May  7 04:24 overview-tree.html
+-rw-r--r-- 1 ugrad    14 May  7 04:24 package-list
+-rw-r--r-- 1 ugrad   827 May  7 04:24 script.js
+-rw-r--r-- 1 ugrad 12842 May  7 03:52 stylesheet.css
+
+cs1302-arcade/doc/cs1302:
+total 4
+drwxr-xr-x 2 ugrad 4096 May  7 03:52 arcade
+
+cs1302-arcade/doc/cs1302/arcade:
+total 244
+-rw-r--r-- 1 ugrad 11108 May  7 04:24 Arcade2048View.html
+-rw-r--r-- 1 ugrad 11284 May  7 04:24 ArcadeApp.html
+-rw-r--r-- 1 ugrad  9019 May  7 04:24 ArcadeDriver.html
+-rw-r--r-- 1 ugrad 14173 May  7 04:24 ArcadeTetrisView.html
+-rw-r--r-- 1 ugrad 11832 May  7 04:24 Controller2048.html
+-rw-r--r-- 1 ugrad 11440 May  7 04:24 ControllerTetris.html
+-rw-r--r-- 1 ugrad 13107 May  7 04:24 Direction.html
+-rw-r--r-- 1 ugrad 14313 May  7 04:24 Model2048.html
+-rw-r--r-- 1 ugrad  2160 May  7 04:24 package-frame.html
+-rw-r--r-- 1 ugrad  7821 May  7 04:24 package-summary.html
+-rw-r--r-- 1 ugrad  6690 May  7 04:24 package-tree.html
+-rw-r--r-- 1 ugrad 10554 May  7 04:24 Score.html
+-rw-r--r-- 1 ugrad 14156 May  7 04:24 TetrisBlock.html
+-rw-r--r-- 1 ugrad 26155 May  7 04:24 TetrisBoard.html
+-rw-r--r-- 1 ugrad 10288 May  7 04:24 TetrisLevel.html
+-rw-r--r-- 1 ugrad 18849 May  7 04:24 TetrisPiece.html
+-rw-r--r-- 1 ugrad 25038 May  7 04:24 Tile.html
+
+cs1302-arcade/src:
+total 4
+drwxr-xr-x 4 ugrad 4096 May  5 17:26 main
+
+cs1302-arcade/src/main:
+total 8
+drwxr-xr-x 3 ugrad 4096 May  5 17:26 java
+drwxr-xr-x 2 ugrad 4096 May  7 04:36 resources
+
+cs1302-arcade/src/main/java:
+total 4
+drwxr-xr-x 3 ugrad 4096 May  5 17:26 cs1302
+
+cs1302-arcade/src/main/java/cs1302:
+total 4
+drwxr-xr-x 2 ugrad 4096 May  7 04:37 arcade
+
+cs1302-arcade/src/main/java/cs1302/arcade:
+total 96
+-rwxr-xr-x 1 ugrad  9320 May  7 04:37 Arcade2048View.java
+-rwxr-xr-x 1 ugrad  3902 May  7 04:37 ArcadeApp.java
+-rwxr-xr-x 1 ugrad   784 May  7 04:12 ArcadeDriver.java
+-rw-r--r-- 1 ugrad  7782 May  7 04:13 ArcadeTetrisView.java
+-rwxr-xr-x 1 ugrad  8997 May  7 04:13 Controller2048.java
+-rw-r--r-- 1 ugrad  5694 May  7 04:23 ControllerTetris.java
+-rwxr-xr-x 1 ugrad   231 May  7 04:15 Direction.java
+-rwxr-xr-x 1 ugrad  3956 May  7 04:15 Model2048.java
+-rwxr-xr-x 1 ugrad  1126 May  7 04:15 Score.java
+-rw-r--r-- 1 ugrad  1534 May  7 04:15 TetrisBlock.java
+-rw-r--r-- 1 ugrad 11862 May  7 04:17 TetrisBoard.java
+-rw-r--r-- 1 ugrad  1001 May  7 04:17 TetrisLevel.java
+-rw-r--r-- 1 ugrad  5748 May  7 04:17 TetrisPiece.java
+-rwxr-xr-x 1 ugrad  5135 May  7 04:17 Tile.java
+
+cs1302-arcade/src/main/resources:
+total 116
+-rwx------ 1 ugrad 42474 May  7 03:39 2048.png
+-rwxr-xr-x 1 ugrad  1019 May  7 04:36 style2048.css
+-rwx------ 1 ugrad 69522 May  7 03:40 Tetris.png
+/home/ugrads/holmes/cs1302-arcade:/home/work/cs1302a
