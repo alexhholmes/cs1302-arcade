@@ -90,11 +90,11 @@ public class Arcade2048View {
         buildGameOver();
         // GridPane
         root = new GridPane();
-        root.add(gameLabel, 0, 0, 1, 1);
+        root.add(gameLabel, 0, 0, 1, 2);
         root.add(scoreVBox, 1, 0, 1, 1);
         root.add(buttonBox, 1, 1, 1, 1);
         root.add(boardBackground, 0, 2, 2, 1);
-        root.add(text, 0, 3, 1, 1);
+        root.add(text, 0, 1, 1, 1);
         GridPane.setValignment(gameLabel, VPos.TOP);
         GridPane.setHalignment(gameLabel, HPos.LEFT);
         GridPane.setValignment(scoreVBox, VPos.TOP);
