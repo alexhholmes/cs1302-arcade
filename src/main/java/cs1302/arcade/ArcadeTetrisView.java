@@ -126,6 +126,7 @@ public class ArcadeTetrisView {
      */
     private void quitGame(Button button){
         EventHandler<ActionEvent> handler = event -> {
+            game.tLine.pause();
             app.setSelectGameScene();
         };
         button.setOnAction(handler);
