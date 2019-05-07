@@ -43,4 +43,16 @@ that the Markdown is transformed into nice looking HTML.
    of them.
 
 3. **PROB:** Getting the tetris pieces to properly rotate is still very challenging for us.
-   The animation on 2048 has been difficult to figure out. 
+   The animation on 2048 has been difficult to figure out.
+
+## TUE 2019-05-07 @ 3:30 PM EST
+
+1. **DONE:** Completed implementation of both tetris and 2048.
+
+2. **TODO:** Relax
+
+3. **PROB:** Getting basic gameflow of tetris as well as implementing proper collision
+   with the pieces. Making sure the fallspeed updated properly for tetris was also very challenging.
+   For 2048, overcoming difficulties with a tile merging algorithm was a huge challenge.
+   In addition, getting the animation to work properly for 2048 was also very difficult.    
+
